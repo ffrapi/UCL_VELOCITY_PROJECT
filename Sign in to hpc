@@ -1,0 +1,2 @@
+ssh -l fpitsill -J fpitsill@knuckles.cs.ucl.ac.uk pchuckle
+#enter password 4/10/21
