@@ -1,0 +1,5 @@
+#4/10/21
+cd /SAN/ugi/LepGenomics
+
+mkdir C3_Aricia_agestis_FP
+#new folder name for Aricia agestis, C3 is the species code used 
