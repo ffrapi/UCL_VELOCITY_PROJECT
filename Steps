@@ -1,0 +1,11 @@
+#Create Directory
+#Move all previous data to new Directory C3_Aricia_agestis_FP
+#Move cutadapt.sh scripts to new directory
+
+For each MODC, MODE, MUS:
+#Modify cutadapt.sh script using nano:
+  #1: Change the name of the species to C3_Aricia_agestis_FP
+  #2: Change the input and outfile (example input: 00_raw_reads_museum, output: 01a_museum_cutadapt_reads)
+  #3: Change the number of species using -t
+#Run cutadapt.sh script using ./scriptname.sh - will output file to submit job on cluster
+#Submit job to cluster and use qstat to check on the progress of the job
