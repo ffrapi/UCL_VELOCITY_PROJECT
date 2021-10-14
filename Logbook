@@ -1,0 +1,59 @@
+ssh -l fpitsill -J fpitsill@knuckles.cs.ucl.ac.uk pchuckle
+#enter password 4/10/21
+
+cd /SAN/ugi/LepGenomics #access shared folder
+mkdir C3_Aricia_agestis_FP #created new folder 
+
+#13/10/21
+
+#PRENAME
+mkdir scripts
+nano prename.pl
+/share/apps/perl-5.30.0/bin/perl5.30.0 ../../prename.pl --help
+prename.pl
+ls prename.pl
+nano prename.pl
+
+
+#COPIED ALL DATA FROM C3_Aricia_agestis TO C3_Aricia_agestis_FP
+
+    #Museum1
+cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
+cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
+cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
+
+    #Museum2
+cp *zip /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2 
+cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
+cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
+
+    #Modern1
+cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_modern
+
+    #Modern2_exp
+cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_modern_exp
+
+
+#CONCATENATE MUSEUM SAMPLES
+
+mkdir 00_raw_reads_museum_FINAL/
+ls 00_raw_reads_museum/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museum1.names
+ls 00_raw_reads_museum/ALLSAMPLES/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museumconcat.names
+diff museum1.names museumconcat.names | grep 'AAg' | sed 's/^>\ //'> museum1.tomove
+wc -l museum1.tomove > count
+echo "number of samples to move:" $count
+for i in $(cat museum1.tomove); do cp 00_raw_reads_museum/ALLSAMPLES/$i*gz 00_raw_reads_museum_FINAL; done
+
+
+
+#14/10/21
+
+#CUTADAPT ON 5 MUSEUM SAMPLES
+
+mkdir 00_raw_reads_museum_sample 
+cp 01a_museum1_cutadapt_filtering_trimming.sh /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum_sample
+nano 01a_museum1_cutadapt_filtering_trimming.sh #Changed species name to C3_Aricia_agestis_FP and species number by changing -t from 48 to 5
+./01a_museum1_cutadapt_filtering_trimming.sh  #outputs command used to submit job to the cluster
+qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01a_filtered_reads_museum_sample/parallel_cutadapt.20211014-125514.smsjob.sh #job submitted to cluster
+qstat #to check the status of the job
+
