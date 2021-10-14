@@ -17,22 +17,22 @@ nano prename.pl
 
 #COPIED ALL DATA FROM C3_Aricia_agestis TO C3_Aricia_agestis_FP
 
-    #Museum1
+    #Museum1 (190312)
 cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
 cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
 cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
-            #Example file: AAg-19-1900-02_190312_L005_R1.fastq.gz (190312)
+            #Example file: AAg-19-1900-02_190312_L005_R1.fastq.gz 
 
-    #Museum2
+    #Museum2 (191121)
 cp *zip /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2 
 cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
 cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
-            #Example file: AAg-19-1900-04_191121_L003_R1.fastq.gz (191121)
+            #Example file: AAg-19-1900-04_191121_L003_R1.fastq.gz 
 
-    #Modern1
+    #Modern1 (L002)
 cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_modern
 
-    #Modern2_exp
+    #Modern2_exp (L001)
 cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_modern_exp
 
 
@@ -54,9 +54,18 @@ for i in $(cat museum1.tomove); do cp 00_raw_reads_museum/ALLSAMPLES/$i*gz 00_ra
 
 mkdir 00_raw_reads_museum_sample 
 cp 01a_museum1_cutadapt_filtering_trimming.sh /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum_sample
-nano 01a_museum1_cutadapt_filtering_trimming.sh #Changed species name to C3_Aricia_agestis_FP and species number by changing -t from 48 to 5
+nano 01a_museum1_cutadapt_filtering_trimming.sh #Changed species name to C3_Aricia_agestis_FP, and Infile/outfile and species number by changing -t from 48 to 5
 ./01a_museum1_cutadapt_filtering_trimming.sh  #outputs command used to submit job to the cluster
 qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01a_filtered_reads_museum_sample/parallel_cutadapt.20211014-125514.smsjob.sh #job submitted to cluster
 qstat #to check the status of the job
 
+#CUTADAPT ON 2 MODERN SAMPLES
 
+mkdir 00_raw_reads_modern_exp_sample
+cp AAg-19-2016-01_L002_R1.fastq.gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_exp_sample
+cp AAg-19-2016-02_L002_R1.fastq.gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_exp_sample
+cp 01a_modern_cutadapt_filtering_trimming.sh /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_exp_sample
+nano 01a_modern_cutadapt_filtering_trimming.sh #Changed species name to C3_Aricia_agestis_FP and species number by changing -t from 48 to 5
+./01a_modern_cutadapt_filtering_trimming.sh
+qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_sample/01a_modern_cutadapt_reads/parallel_cutadapt.20211014-210144.smsjob.sh
+qstat
