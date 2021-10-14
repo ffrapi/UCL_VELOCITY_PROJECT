@@ -21,11 +21,13 @@ nano prename.pl
 cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
 cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
 cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum
+            #Example file: AAg-19-1900-02_190312_L005_R1.fastq.gz (190312)
 
     #Museum2
 cp *zip /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2 
 cp *log /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
 cp *html /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum2
+            #Example file: AAg-19-1900-04_191121_L003_R1.fastq.gz (191121)
 
     #Modern1
 cp *gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_modern
@@ -48,7 +50,7 @@ for i in $(cat museum1.tomove); do cp 00_raw_reads_museum/ALLSAMPLES/$i*gz 00_ra
 
 #14/10/21
 
-#CUTADAPT ON 5 MUSEUM SAMPLES
+#CUTADAPT ON 5 MUSEUM1 SAMPLES
 
 mkdir 00_raw_reads_museum_sample 
 cp 01a_museum1_cutadapt_filtering_trimming.sh /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/DATA/00_raw_reads_museum_sample
@@ -56,4 +58,5 @@ nano 01a_museum1_cutadapt_filtering_trimming.sh #Changed species name to C3_Aric
 ./01a_museum1_cutadapt_filtering_trimming.sh  #outputs command used to submit job to the cluster
 qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01a_filtered_reads_museum_sample/parallel_cutadapt.20211014-125514.smsjob.sh #job submitted to cluster
 qstat #to check the status of the job
+
 
