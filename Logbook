@@ -69,3 +69,42 @@ nano 01a_modern_cutadapt_filtering_trimming.sh #Changed species name to C3_Arici
 ./01a_modern_cutadapt_filtering_trimming.sh
 qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_sample/01a_modern_cutadapt_reads/parallel_cutadapt.20211014-210144.smsjob.sh
 qstat
+
+#15/10/21
+
+#CUTADAPT on 2 MODERN SAMPLES RE-ATTEMPT
+
+cp AAg-19-2016-01_L001_R*.fastq.gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_sample
+mkdir cutadapt_modern_test_output
+ nano cutadapt_script_test.sh
+ 
+                ##EDITED FILE
+                               SHAREDFOLDER=/SAN/ugi/LepGenomics
+                            SCRIPTS=VelocityPipeline/tools
+                            SPECIES=C3_Aricia_agestis_FP
+                            INFILE=00_raw_reads_modern_sample
+                            OUTFILE=00_raw_reads_modern_sample/cutadapt_modern_test_output
+
+                            $SHAREDFOLDER/$SCRIPTS/01a_parallel_cutadapt_UCL.sh \
+                            -i $SHAREDFOLDER/$SPECIES/$INFILE \
+                            -o $SHAREDFOLDER/$SPECIES/$OUTFILE -t 2 -m 8 -ph 33 \
+                            -fwad1 AGATCGGAAGAGCACACGTCTGAACTCCAGTC -rvad1 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+                            -minl 20 -phredq 20;
+                            
+./cutadapt_script_test.sh 
+qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_sample/cutadapt_modern_test_output/parallel_cutadapt.20211015-193411.smsjob.sh
+parallel_cutadapt.20211015-193411 - job name/number
+
+
+#CHECKING JOB STATUS
+
+    #1 Go to output directory specified in the .sh script
+    #2 Go to the log file
+    #3 The title of the log file gives the name of the job, in the format "jobname".o"jobnumber"."arraynumber", eg parallel_cutadapt.20211015-193411
+    #4 move to the home directory using cd and check what log files have written and at what time using ls -ltr *.o*
+  
+
+
+
+
+
