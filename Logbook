@@ -141,8 +141,15 @@ nano 01a_museum1_cutadapt_filtering_trimming.sh
 
 ./01a_museum1_cutadapt_filtering_trimming.sh
 qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_museum_sample/01a_museum_cutadapt_reads/parallel_cutadapt.20211017-122826.smsjob.sh
-qstat #Started at 12.30
+qstat #Started at 12.30 Eqw status after 5-10 minutes
 
+    #Rerun museum cutadapt: 
+qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_museum_sample/01a_museum_cutadapt_reads/parallel_cutadapt.20211017-130001.smsjob.sh
+qstat #Started running at 13:00
+
+#testing bbtools on cutadapt modern samples 
+
+/share/apps/genomics/bbmap-38.59/bbmap.sh
 
 
 
