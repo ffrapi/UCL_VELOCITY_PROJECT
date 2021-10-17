@@ -104,6 +104,45 @@ parallel_cutadapt.20211015-193411 - job name/number
     #4 move to the home directory using cd and check what log files have written and at what time using ls -ltr *.o*
   
 
+#17/10/21
+
+#Cutadapt sample museum 
+cp AAg-19-2016-01_L001_R*.fastq.gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_modern_sample
+cp AAg-19-1900-03_190312_L005_R*.fastq.gz /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_museum_sample
+mkdir 01a_museum_cutadapt_reads
+nano 01a_museum1_cutadapt_filtering_trimming.sh 
+
+            #Output: 
+                        #!/bin/bash
+                        ##################################
+                        # Alexandra Jansen van Rensburg
+                        # alexjvr@gmail.com
+                        # Last modified 06/07/2021 11:22
+                        ##################################
+
+                        # Creates submission script to use cutadapt to remove adapters from demultiplexed Illumina libraries.
+                        # Poly-A and -T filters have been removed as we decided that these would be dropped due to mapping quality by bwa mem.
+                        # Additional filters included in Lymantria monacha dataset
+                        # -fwad2 CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT -fwad3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                        # -rvad2 CTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT -rvad3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+                        SHAREDFOLDER=/SAN/ugi/LepGenomics
+                        SCRIPTS=VelocityPipeline/tools
+                        SPECIES=C3_Aricia_agestis_FP
+                        INFILE=00_raw_reads_museum_sample
+                        OUTFILE=00_raw_reads_museum_sample/01a_museum_cutadapt_reads
+
+                        $SHAREDFOLDER/$SCRIPTS/01a_parallel_cutadapt_UCL.sh \
+                        -i $SHAREDFOLDER/$SPECIES/$INFILE \
+                        -o $SHAREDFOLDER/$SPECIES/$OUTFILE -t 4 -m 8 -ph 33 \
+                        -fwad1 AGATCGGAAGAGCACACGTCTGAACTCCAGTC -rvad1 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+                        -minl 20 -phredq 20;
+
+
+./01a_museum1_cutadapt_filtering_trimming.sh
+qsub /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_museum_sample/01a_museum_cutadapt_reads/parallel_cutadapt.20211017-122826.smsjob.sh
+qstat #Started at 12.30
+
 
 
 
