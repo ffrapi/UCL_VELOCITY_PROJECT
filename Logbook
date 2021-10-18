@@ -232,7 +232,7 @@ nano 01c_bbtools_repair_museum_ARRAY.sh:
                                 BBREPAIR=/share/apps/genomics/bbmap-38.59/repair.sh
                                 SPECIESDIR=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP
                                 PATH1=00_raw_reads_museum_sample/01a_museum_cutadapt_reads
-                                PATH2=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/00_raw_reads_museum_sample/01b_musPERepaired
+                                PATH2=00_raw_reads_museum_sample/01b_musPERepaired
 
                                 # create input files here by:
                                 #ls $SPECIESDIR/$PATH1/*R1* | awk -F "/" '{print $NF}' > R1.museum.names.torepair
@@ -249,7 +249,7 @@ nano 01c_bbtools_repair_museum_ARRAY.sh:
                                 time $BBREPAIR in=$SPECIESDIR/$PATH1/${NAME1} out=$SPECIESDIR/$PATH2/${PREFIX}.R1.repaired.fastq.gz overwrite=f tossbrokenreads
  
  #For the script of bbtools, the number of individuals was changed from 1-48 to 1-4 (as this is a sample run), the SPECIESDIR was changed to C3_Aricia_agestis_FP, and PATH1 and PATH2 were changed according to where the 01a_museum_Cutadapt_reads and the new directory 01b_musPERepaired are located.
- #Job submitted at 18.28pm
+ #Job submitted at 18.48pm
  
  
  
