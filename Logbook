@@ -218,7 +218,7 @@ nano 01c_bbtools_repair_museum_ARRAY.sh:
                                 #$ -l h_vmem=32G #enforced limit on shell memory usage
                                 #$ -l h_rt=1:00:00 ##wall time.
                                 #$ -j y  #concatenates error and output files (with prefix job1)
-                                #$ -t 1-4
+                                #$ -t 1-2
 
                                 #run job in working directory
                                 cd $SGE_O_WORKDIR
