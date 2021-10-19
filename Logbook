@@ -367,7 +367,7 @@ nano 02a_MapwithBWAmem.ARRAY_museum.merged.sh
 
 
 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh
-#JOB SUBMITTED AT 20:35, Started running at 20:39 + 20:43 (for 2 individuals only)
+#JOB SUBMITTED AT 20:35, Started running at 20:39 + 20:43 (for 2 individuals only), finishes between 9.00-9.08
 
 
 
