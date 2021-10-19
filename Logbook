@@ -367,8 +367,29 @@ nano 02a_MapwithBWAmem.ARRAY_museum.merged.sh
 
 
 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh
-#JOB SUBMITTED AT 20:35, Started running at 20:39 + 20:43 (for 2 individuals only), finishes between 9.00-9.08
+#JOB SUBMITTED AT 20:35, Started running at 20:39 + 20:43 (for 2 individuals only), finishes between 9.00-9.08, but did not work
+#Check file sizes
+
+du -sh *bam   
+bcftools=/share/apps/genomics/bcftools-1.9/bin/bcftools
+$bcftools view file.bam | head
+samtools=/share/apps/genomics/samtools-1.9/bin/samtools
+$samtools flagstat file.bam
+for i in $(ls *bam); do ls $i >>flagstat.log && $samtools flagstat $i >> flagstat.log; done
+
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /$
+
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/u$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/u$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/u$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/01c_musALL_merged/AAg-19-1900-01.R1.repaired.fastq.gz.repaired.merged.fa$
+time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/01c_musALL_merged/AAg-19-1900-03.R1.repaired.fastq.gz.repaired.merged.fa$
 
 
+#Have to try this script again 
 
+ nano 02a_MapwithBWAmem.ARRAY_museum_forATLA #changed species name, input, output, reference genome etc
+ qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh #Started running at 
 
