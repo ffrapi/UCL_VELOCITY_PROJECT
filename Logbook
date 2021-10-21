@@ -257,13 +257,19 @@ qsub 01b_bbtools_repair_museum_ARRAY.sh #submitted at 10:47:33, r = 10:50:32, fi
 
  
  
- ##19/10/21 
+ ##19/10/21 (MOdified on 21st of October)
  
  ###STEP 2 OF PIPELNE
  
  ###2A: Map to reference genome 
- 
+
 cp -R RefGenome /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP #copied RefGenome from C3_Aricia_agestis to C3_Aricia_agestis_FP
+
+    #Modification: Indexed the reference genome
+BWA=/share/apps/genomics/bwa-0.7.17/bwa
+$BWA index RefGenome/*fna
+
+
 ls 01c_musALL_merged/*repaired.merged*fastq* >> mus.merged.names #Tell Alex about fastq* end star
 sed -i s:0c_musALL_merged/::g mus.merged.names #Tell alex about mus.merged.names
 mkdir 02a_mapped_museum_MERGED
@@ -323,9 +329,9 @@ nano 02a_MapwithBWAmem.ARRAY_museum.merged.sh
                     time $BWA mem $REF $INPUT/${NAME}.$TAIL | samtools sort -o  $OUTPUT/${NAME}.MERGED.bam
 
 
-
-
 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #Separator: "."
+
+#TRIALS:
 ########1JOB SUBMITTED AT 11:18:32, Running = , Finished = Error
 
 time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/u$
@@ -348,22 +354,35 @@ Job submitted 11:32, Finished = 11:42 (queud for some time)
 time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/.MERGED.bam
 time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01c_musALL_merged/.R1.repaired.fastq.gz.repaired.merged.fastq.gz| samtools sort -o  /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/.MERGED.bam
 
+#########3 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #Changed mus.names to mus.merged.names Job submitted  11:45:59 
+########4 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #Changed mus.merged.names back to mus.names and changed the separator to "_R"
 
-#########3 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #Changed mus.names to mus.merged.names 
-Job submitted  11:45:59 
+        #After indexing genome: 
+
+            ########5 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #After indexing reference genome, submitted 14:01, finished by 14:04
+            #######6 qsub 02a_MapwithBWAmem.ARRAY_museum.merged.sh #After inedxing, changed mus.names to mus.merged.names, submitted at 14.08
 
 
-du -sh *bam   
+##Map ATLAS.sh script
+
+ nano 02a_MapwithBWAmem.ARRAY_museum_forATLA #changed species name, input, output, reference genome etc
+ 
+ #TRIALS: 
+ 
+ #######1qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh #Started running at 11:36:49 "Separator: "-R", finished by 11:45:59 
+ #######2qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh#Separator: "_R", submitted: 11:48:27  
+ 
+         #after indexing genome: 
+         #######3qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh #Separator "_R" after indexing reference genome, submitted: 14:04:50, finished by 14.08
+ 
+ 
+ 
+ 
+
+ du -sh *bam   
 bcftools=/share/apps/genomics/bcftools-1.9/bin/bcftools
 $bcftools view file.bam | head
 samtools=/share/apps/genomics/samtools-1.9/bin/samtools
 $samtools flagstat file.bam
 for i in $(ls *bam); do ls $i >>flagstat.log && $samtools flagstat $i >> flagstat.log; done
-
-
-
-#Have to try this script again 
-
- nano 02a_MapwithBWAmem.ARRAY_museum_forATLA #changed species name, input, output, reference genome etc
- qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh #Started running at 11:36:49 "Separator: "-R", finished by 11:45:59 
-    qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh#Separator: "_R", submitted: 11:48:27  
+ 
