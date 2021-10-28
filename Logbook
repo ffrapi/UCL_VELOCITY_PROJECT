@@ -376,13 +376,385 @@ time /share/apps/genomics/bwa-0.7.17/bwa mem /SAN/ugi/LepGenomics/C3_Aricia_ages
          #######3qsub 02a_MapwithBWAmem.ARRAY_museum_forATLAS.sh #Separator "_R" after indexing reference genome, submitted: 14:04:50, finished by 14.08
  
  
+ #MAP REFERENCE GENOME WORKED USING THIS SCRIPT: 
+ 
+ qsub 02a_Museum_Mapped.sh
  
  
+ 
+ #23/10/21
+ 
+ ###MAPPING MODC and MODE
 
- du -sh *bam   
-bcftools=/share/apps/genomics/bcftools-1.9/bin/bcftools
-$bcftools view file.bam | head
-samtools=/share/apps/genomics/samtools-1.9/bin/samtools
-$samtools flagstat file.bam
-for i in $(ls *bam); do ls $i >>flagstat.log && $samtools flagstat $i >> flagstat.log; done
+###MODC
+ls  01a_modern_cutadapt_reads/*R1.fastq* 
+ls  01a_modern_cutadapt_reads/*R1.fastq* >> R1.modc.names
+ls  01a_modern_cutadapt_reads/*R2.fastq* >> R2.modc.names
+sed -i 's:01a_modern_cutadapt_reads/::g' *names
+mkdir 02a_modern_mapped
+mkdir 02a_modern_mapped/01a_modern_cutadapt_reads
+
+###MODE
+ls 01a_modern_exp_cutadapt_reads/*R1.fastq* >> R1.mode.names
+ls 01a_modern_exp_cutadapt_reads/*R2.fastq* >> R2.mode.names
+ sed -i 's:01a_modern_exp_cutadapt_reads/::g' *names
+mkdir 02a_modern_mapped_exp
+mkdir 02a_modern_mapped/01a_modern.exp_cutadapt_reads
+
+
+
+#SCRIPT:
+
+#!/bin/bash
+#$ -S /bin/bash
+#$ -N C3.MODC_BWAmem  ##job name
+#$ -l tmem=16G #RAM
+#$ -l h_vmem=16G #enforced limit on memory shell usage
+#$ -l h_rt=10:00:00 ##wall time.
+#$ -j y  #concatenates error and output files (with prefix job1)
+#$ -t 1-2
+
+#run job in working directory
+cd $SGE_O_WORKDIR
+
+
+##Software
+BWA=/share/apps/genomics/bwa-0.7.17/bwa
+export PATH=/share/apps/genomics/samtools-1.9/bin:$PATH
+export LD_LIBRARY_PATH=/share/apps/genomics/samtools-1.9/lib:$LD_LIBRARY_PATH
+
+#Define variables
+SHAREDFOLDER=/SAN/ugi/LepGenomics
+SPECIES=C3_Aricia_agestis_FP
+REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+INPUT=$SHAREDFOLDER/$SPECIES/01a_modern_exp_cutadapt_reads
+OUTPUT=$SHAREDFOLDER/$SPECIES/02a_modern_mapped_exp
+
+#Create a list of input files
+#ls $INPUT/*R1.fastq.gz | awk -F "/" '{print $NF}' > mode.R1.tomap
+#ls $INPUT/*R2.fastq.gz | awk -F "/" '{print $NF}' > mode.R2.tomap
+
+#echo "list of samples to map = mode.R1.tomap & mode.R2.tomap" >> map_mode.log
+
+##Define ARRAY names
+NAME1=$(sed "${SGE_TASK_ID}q;d" mode.R1.tomap)
+NAME2=$(sed "${SGE_TASK_ID}q;d" mode.R2.tomap)
+
+
+##Map using array
+
+sample_name=`echo ${NAME1} | awk -F "." '{print $1}'`
+echo "[mapping running for] $sample_name"
+printf "\n"
+echo "time $BWA mem $REF $INPUT/${NAME1} $INPUT/${NAME2}| samtools sort -o  $OUTPUT/${NAME1}.forATLAS.bam" >> map_mus.log
+time $BWA mem $REF $INPUT/${NAME1} $INPUT/${NAME2} | samtools sort -o  $OUTPUT/${NAME1}.forATLAS.bam
+
+
+ ##24/10/21
  
+ ###DETERMINING FILE SIZE
+du -sh *bam   
+$samtools view *bam | head
+samtools=/share/apps/genomics/samtools-1.9/bin/samtools
+$samtools flagstat *bam
+for i in $(ls *bam); do ls $i >>flagstat.log && $samtools flagstat $i >> flagstat.log; done
+ #Index files script
+ 
+                     nano Index1.sh
+
+                     #!/bin/bash
+                    #$ -S /bin/bash
+                    #$ -N C3.Mus.Index  ##job name
+                    #$ -l tmem=16G #RAM
+                    #$ -l h_vmem=16G #enforced limit on shell memory usage
+                    #$ -l h_rt=1:00:00 ##wall time.
+                    #$ -j y  #concatenates error and output files (with prefix job1)
+
+                    #Script to index a list of bamfiles specified in an input textfile
+
+                    #Run on working directory
+                    cd $SGE_O_WORKDIR
+
+
+                    #Path to software
+                    samtools=/share/apps/genomics/samtools-1.9/bin/samtools
+
+                    #Define variables
+                    SHAREDFOLDER=/SAN/ugi/LepGenomics
+                    SPECIES=C3_Aricia_agestis_FP
+                    FOLDER=C3_Subset_Tests
+                    REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                    INPUT=$SHAREDFOLDER/$SPECIES/$FOLDER/02a_mapped_modern_Downsampled/mus.Downsampled.merged.bamlist
+                    OUTPUT=$SHAREDFOLDER/$SPECIES/$FOLDER/02a_mapped_modern_Downsampled
+                    TASK=theta
+
+
+                    #Run analysis
+                    while IFS=  read -r line; do $samtools index $line; done < $INPUT
+
+qsub Index1.sh #output was .bai files for each .bam file in the folder
+
+ #25/10/21
+ 
+##PROCESSING BAM FILES
+#Changed script for 02b.0, 02b.1, 0.2b.2 and submitted the jobs, resulting log file was created but no output files created.
+
+nano 02b.0_AddRG.sh
+
+                #!/bin/bash
+                #$ -S /bin/bash
+                #$ -N C3.Mus_AddRG  ##job name
+                #$ -l tmem=32G #RAM
+                #$ -l h_vmem=32G #enforced limit on shell memory usage
+                #$ -l h_rt=1:00:00 ##wall time.
+                #$ -j y  #concatenates error and output files (with prefix job1)
+                #$ -t 1-2
+
+                #Run on working directory
+                cd $SGE_O_WORKDIR
+
+                #Call software
+                export PATH=/share/apps/java/bin:$PATH
+                export LD_LIBRARY_PATH=/share/apps/java/lib:$LD_LIBRARY_PATH
+                PICARD=/share/apps/genomics/picard-2.20.3/bin/picard.jar
+
+
+                #Define variables
+                SHAREDFOLDER=/SAN/ugi/LepGenomics
+                SPECIES=C3_Aricia_agestis_FP
+                REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                INPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                OUTPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                #TAIL=`ls 02a_mapped_museum/*bam | awk -F "/" '{print $NF}' | awk '{print substr($0,14)}' | head -n 1`
+                #TAIL=_R1_001.fastq.gzcutadapt_filtered_R1.fastq.gz.forATLAS.bam
+                TAIL=.R1.repaired.fastq.gz.repaired.merged.fastq.gz.bam
+
+                #Set up ARRAY job
+                #ls 02a_mapped_museum_MERGED/*bam | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > mus.names
+                NAME=$(sed "${SGE_TASK_ID}q;d" mus.names)
+
+
+                ##Add readgroups
+
+                echo "java -jar $PICARD AddOrReplaceReadGroups \
+                       I=$INPUT/${NAME}$TAIL \
+                       O=$OUTPUT/${NAME}.RG.bam \
+                       RGID=C3mus \
+                       RGLB=mus0204cleancat \
+                       RGPL=ILLUMINA \
+                       RGPU=unit1 \
+                       RGSM=${NAME}" >> 02b.0_AddRG.log
+
+
+                time java -jar $PICARD AddOrReplaceReadGroups \
+                       I=$INPUT/${NAME}$TAIL \
+                       O=$OUTPUT/${NAME}.RG.bam \
+                       RGID=C3mus \
+                       RGLB=mus204cleancat \
+                       RGPL=ILLUMINA \
+                       RGPU=unit1 \
+                       RGSM=${NAME}
+
+ #OUTPUT: nano 02b.1_MarkDup_MODC.sh 
+ 
+                       #!/bin/bash
+                    #$ -S /bin/bash
+                    #$ -N C3.Mus.MarkDups  ##job name
+                    #$ -l tmem=16G #RAM
+                    #$ -l h_vmem=16G #enforced limit on shell memory usage
+                    #$ -l h_rt=1:00:00 ##wall time.
+                    #$ -j y  #concatenates error and output files (with prefix job1)
+                    #$ -t 1-2
+
+
+                    #Run on working directory
+                    cd $SGE_O_WORKDIR
+
+                    #Call software
+                    export PATH=/share/apps/java/bin:$PATH
+                    export LD_LIBRARY_PATH=/share/apps/java/lib:$LD_LIBRARY_PATH
+                    PICARD=/share/apps/genomics/picard-2.20.3/bin/picard.jar
+
+
+                    #Define variables
+                    SHAREDFOLDER=/SAN/ugi/LepGenomics
+                    SPECIES=C3_Aricia_agestis_FP
+                    REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                    INPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                    OUTPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                    TAIL="RG.bam"
+
+                    #Set up ARRAY job
+                    #ls $INPUT/*RG.bam | awk -F "/" '{print $NF}' | awk -F "." '{print $1}' >> mus.names
+                    NAME=$(sed "${SGE_TASK_ID}q;d" mus.names)
+
+                    echo "java -jar $PICARD MarkDuplicates \
+                    INPUT=$INPUT/${NAME}.$TAIL \
+                    OUTPUT=$OUTPUT/${NAME}.rmdup.bam \
+                    METRICS_FILE=$OUTPUT/${NAME}.dup.txt \
+                    REMOVE_DUPLICATES=false \
+                    VALIDATION_STRINGENCY=SILENT \
+                    CREATE_INDEX=true" >> 02b.1_MarkDup.log
+
+
+                    time java -jar $PICARD MarkDuplicates \
+                    INPUT=$INPUT/${NAME}.$TAIL \
+                    OUTPUT=$OUTPUT/${NAME}.rmdup.bam \
+                    METRICS_FILE=$OUTPUT/${NAME}.dup.txt \
+                    REMOVE_DUPLICATES=false \
+                    VALIDATION_STRINGENCY=SILENT \
+                    CREATE_INDEX=true
+
+#OUTPUT: nano  02b.1_MarkDup_Mus.sh  
+
+                    #!/bin/bash
+                    #$ -S /bin/bash
+                    #$ -N C3.Mus.MarkDups  ##job name
+                    #$ -l tmem=16G #RAM
+                    #$ -l h_vmem=16G #enforced limit on shell memory usage
+                    #$ -l h_rt=1:00:00 ##wall time.
+                    #$ -j y  #concatenates error and output files (with prefix job1)
+                    #$ -t 1-2
+
+
+                    #Run on working directory
+                    cd $SGE_O_WORKDIR
+
+                    #Call software
+                    export PATH=/share/apps/java/bin:$PATH
+                    export LD_LIBRARY_PATH=/share/apps/java/lib:$LD_LIBRARY_PATH
+                    PICARD=/share/apps/genomics/picard-2.20.3/bin/picard.jar
+
+
+                    #Define variables
+                    SHAREDFOLDER=/SAN/ugi/LepGenomics
+                    SPECIES=C3_Aricia_agestis_FP
+                    REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                    INPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                    OUTPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                    TAIL="RG.bam"
+
+                    #Set up ARRAY job
+                    #ls $INPUT/*RG.bam | awk -F "/" '{print $NF}' | awk -F "." '{print $1}' >> mus.names
+                    NAME=$(sed "${SGE_TASK_ID}q;d" mus.names)
+
+                    echo "java -jar $PICARD MarkDuplicates \
+                    INPUT=$INPUT/${NAME}.$TAIL \
+                    OUTPUT=$OUTPUT/${NAME}.rmdup.bam \
+                    METRICS_FILE=$OUTPUT/${NAME}.dup.txt \
+                    REMOVE_DUPLICATES=false \
+                    VALIDATION_STRINGENCY=SILENT \
+                    CREATE_INDEX=true" >> 02b.1_MarkDup.log
+
+
+                    time java -jar $PICARD MarkDuplicates \
+                    INPUT=$INPUT/${NAME}.$TAIL \
+                    OUTPUT=$OUTPUT/${NAME}.rmdup.bam \
+                    METRICS_FILE=$OUTPUT/${NAME}.dup.txt \
+                    REMOVE_DUPLICATES=false \
+                    VALIDATION_STRINGENCY=SILENT \
+                    CREATE_INDEX=true
+
+
+#26/10/21
+
+#OUTPUT: nano 02b.2_LocalRealignment_Mus.sh
+
+                        #!/bin/bash
+                        #$ -S /bin/bash
+                        #$ -N C3.Mus.LocalRealignment  ##job name
+                        #$ -l tmem=16G #RAM
+                        #$ -l h_vmem=16G #enforced limit on shell memory usage
+                        #$ -l h_rt=1:00:00 ##wall time.
+                        #$ -j y  #concatenates error and output files (with prefix job1)
+                        #$ -t 1-2
+
+                        #Run on working directory
+                        cd $SGE_O_WORKDIR
+
+                        #Call software
+                        export PATH=/share/apps/jdk1.8.0_131/bin:$PATH
+                        export LD_LIBRARY_PATH=/share/apps/jdk1.8.0_131/lib:$LD_LIBRARY_PATH
+
+
+                        # Define variables
+                        SHAREDFOLDER=/SAN/ugi/LepGenomics
+                        SPECIES=C3_Aricia_agestis_FP
+                        REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                        INPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                        OUTPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+
+                        GenomeAnalysisTK=/share/apps/genomics/GenomeAnalysisTK-3.8.1.0/GenomeAnalysisTK.jar
+
+
+                        #Set up ARRAY job
+                        #ls $INPUT/*rmdup.bam |awk -F "/" '{print $NF}' | awk -F "." '{print $1}' > mus.names
+                        NAME=$(sed "${SGE_TASK_ID}q;d" mus.names)
+
+
+                        # Identify targets to realign
+                        java -jar $GenomeAnalysisTK -T RealignerTargetCreator \
+                        -R $REF \
+                        -o $OUTPUT/${NAME}.intervals \
+                        -I $INPUT/${NAME}.rmdup.bam
+
+
+                        # use IndelRealigner to realign the regions found in the RealignerTargetCreator step
+                        java -jar $GenomeAnalysisTK -T IndelRealigner \
+                        -R $REF \
+                        -targetIntervals $INPUT/${NAME}.intervals \
+                        -I $INPUT/${NAME}.rmdup.bam \
+                        -o $OUTPUT/${NAME}.realn.bam
+
+
+#ERROR MESSAGE: Reference genome not indexed?
+
+
+#TRIAL 2: 
+
+                #!/bin/bash
+                #$ -S /bin/bash
+                #$ -N C3.Mus.LocalRealignment  ##job name
+                #$ -l tmem=16G #RAM
+                #$ -l h_vmem=16G #enforced limit on shell memory usage
+                #$ -l h_rt=1:00:00 ##wall time.  
+                #$ -j y  #concatenates error and output files (with prefix job1)
+                #$ -t 1-2
+
+                #Run on working directory
+                cd $SGE_O_WORKDIR 
+
+                #Call software
+                export PATH=/share/apps/jdk1.8.0_131/bin:$PATH
+                export LD_LIBRARY_PATH=/share/apps/jdk1.8.0_131/lib:$LD_LIBRARY_PATH
+
+
+                # Define variables
+                SHAREDFOLDER=/SAN/ugi/LepGenomics
+                SPECIES=C3_Aricia_agestis_FP
+                REF=$SHAREDFOLDER/$SPECIES/RefGenome/GCA_905147365.1_ilAriAges1.1_genomic.fna
+                INPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+                OUTPUT=$SHAREDFOLDER/$SPECIES/02a_mapped_museum_MERGED
+
+                GenomeAnalysisTK=/share/apps/genomics/GenomeAnalysisTK-3.8.1.0/GenomeAnalysisTK.jar
+
+
+                #Set up ARRAY job
+                #ls $INPUT/*rmdup.bam |awk -F "/" '{print $NF}' | awk -F "." '{print $1}' > mus.names 
+                NAME=$(sed "${SGE_TASK_ID}q;d" mus.names)
+
+
+                # Identify targets to realign
+                java -jar $GenomeAnalysisTK -T RealignerTargetCreator \
+                -R $REF \
+                -o $OUTPUT/${NAME}.intervals \
+                -I $INPUT/${NAME}.rmdup.bam
+
+
+                # use IndelRealigner to realign the regions found in the RealignerTargetCreator step
+                java -jar $GenomeAnalysisTK -T IndelRealigner \
+                -R $REF \
+                -targetIntervals $INPUT/${NAME}.intervals \
+                -I $INPUT/${NAME}.rmdup.bam \
+                -o $OUTPUT/${NAME}.realn.bam
+
