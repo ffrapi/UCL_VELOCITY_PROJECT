@@ -757,4 +757,6 @@ nano 02b.0_AddRG.sh
                 -targetIntervals $INPUT/${NAME}.intervals \
                 -I $INPUT/${NAME}.rmdup.bam \
                 -o $OUTPUT/${NAME}.realn.bam
+                
+                
 
