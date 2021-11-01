@@ -458,6 +458,26 @@ $samtools view *bam | head
 samtools=/share/apps/genomics/samtools-1.9/bin/samtools
 $samtools flagstat *bam
 for i in $(ls *bam); do ls $i >>flagstat.log && $samtools flagstat $i >> flagstat.log; done
+
+######FILE SIZES MUSEUM MAPEPD: 
+
+160M	AAg-19-1900-01.R1.repaired.fastq.gz.repaired.merged.fastq.gz.bam
+32K	AAg-19-1900-01.R1.repaired.fastq.gz.repaired.merged.fastq.gz.MERGED.bam
+219M	AAg-19-1900-03.R1.repaired.fastq.gz.repaired.merged.fastq.gz.bam
+32K	AAg-19-1900-03.R1.repaired.fastq.gz.repaired.merged.fastq.gz.MERGED.ba
+
+########FILE SIZES MODERN MAPPED: 
+
+1.6G	AAg-19-2016-01_L002_cutadapt_filtered_R1.fastq.gz.forATLAS.bam
+1.8G	AAg-19-2016-03_L002_cutadapt_filtered_R1.fastq.gz.forATLAS.bam
+
+########FILE SIZES MODERN EXP MAPPED: 
+
+1.4G	AAg-10-2016-01_L001_cutadapt_filtered_R1.fastq.gz.forATLAS.bam
+1.1G	AAg-10-2016-03_L001_cutadapt_filtered_R1.fastq.gz.forATLAS.bam
+
+
+
  #Index files script
  
                      nano Index1.sh
@@ -758,5 +778,33 @@ nano 02b.0_AddRG.sh
                 -I $INPUT/${NAME}.rmdup.bam \
                 -o $OUTPUT/${NAME}.realn.bam
                 
-                
+  #1/11/21
+  
+  ###PREPARING REFERENCE FILES
+  
+  #DOWNDLOAD NECESSARY PROGRAMMES 
+BWA=/share/apps/genomics/bwa-0.7.17/bwa
+samtools=/share/apps/genomics/samtools-1.9/bin/samtools
+java=/share/apps/java/bin/java
+PICARD=/share/apps/genomics/picard-2.20.3/bin/picard.jar
 
+    #CREATE NECESSARY FILES
+myrefdir="/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/RefGenome3/"
+myfasta=$myrefdir"GCA_905147365.1_ilAriAges1.1_genomic.fna"
+mydict=$myrefdir"GCA_905147365.1_ilAriAges1.1_genomic.dict"
+mysnp=$myrefdir"GCA_905147365.1_ilAriAges1.1_genomic.vcf.gz"
+
+    #CREATE BWA REFERENCE
+time $BWA index -a bwtsw $myfasta \
+     >bwaindex.out 2>bwaindex.err
+     
+     #CREATE FASTA INDEX
+ time $samtools faidx $myfasta \
+     >samtoolsindex.out 2>samtoolsindex.err
+     
+     #CREATE SEQUENCE DIRECTORY
+time $java -jar $PICARD CreateSequenceDictionary \
+     REFERENCE=$myfasta \
+     OUTPUT=$mydict \
+     >dict.out 2>dict.err
+     
