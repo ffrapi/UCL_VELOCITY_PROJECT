@@ -518,8 +518,14 @@ qsub Index1.sh #output was .bai files for each .bam file in the folder
  
 ##PROCESSING BAM FILES
 #Changed script for 02b.0, 02b.1, 0.2b.2 and submitted the jobs, resulting log file was created but no output files created.
+ls 02a_modern_mapped_exp/*bam | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > mode.names
+ls 02a_mapped_museum_MERGED/*bam | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > mus.names
+ls 02a_modern_mapped/*bam | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > modc.names
 
-nano 02b.0_AddRG.sh
+nano 02b.0_AddRG_MUS.sh (UPDATE)
+#02b.0_AddRG_MODE.sh 
+#02b.0_AddRG_MODC.sh 
+#02b.0_AddRG_MODC.sh 
 
                 #!/bin/bash
                 #$ -S /bin/bash
