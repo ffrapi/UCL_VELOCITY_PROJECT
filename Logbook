@@ -817,3 +817,9 @@ time $java -jar $PICARD CreateSequenceDictionary \
      OUTPUT=$mydict \
      >dict.out 2>dict.err
      
+ssh -l ajansen -L 3000:morecambe.cs.ucl.ac.uk:22 ajansen@tails.cs.ucl.ac.uk
+ssh -l fpitsill -L 3000:morecambe.cs.ucl.ac.uk:22 fpitsill@knuckles.cs.ucl.ac.uk 
+#open window2 and rsync files of interest to the local directory:
+rsync -auve "ssh -p 3000" $i fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-01.R1/*pdf
+rsync -auve "ssh -p 3000" $i fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-03.R1/*pdf
+
