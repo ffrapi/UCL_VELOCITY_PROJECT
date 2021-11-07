@@ -821,5 +821,19 @@ time $java -jar $PICARD CreateSequenceDictionary \
 ssh -l fpitsill -L 3000:morecambe.cs.ucl.ac.uk:22 fpitsill@knuckles.cs.ucl.ac.uk 
 #OPEN WINDOW TWO AND COPY FILES TO LOCAL DIRECTORY
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped/AAg-19-2016-01_SingleStrand /Users/mac/Desktop/Mapdamage/Modern
+ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped/AAg-19-2016-03_SingleStrand /Users/mac/Desktop/Mapdamage/Modern
+ rsync -auve "ssh -p 3000" fpitsill@knuckles.cs.ucl.ac.uk:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped/AAg-19-2016-03_SingleStrand /Users/mac/Desktop/Mapdamage/Modern
+ rsync -auve "ssh -p 3000" fpitsill@knuckles.cs.ucl.ac.uk:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped_exp/AAg-10-2016-01_SingleStrand /Users/mac/Desktop/Mapdamage/Modern_exp
+ rsync -auve "ssh -p 3000" fpitsill@knuckles.cs.ucl.ac.uk:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped_exp/AAg-10-2016-03_SingleStrand /Users/mac/Desktop/Mapdamage/Modern_exp
+ rsync -auve "ssh -p 3000" fpitsill@knuckles.cs.ucl.ac.uk:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-01.R1 /Users/mac/Desktop/Mapdamage/Museum
+ rsync -auve "ssh -p 3000" fpitsill@knuckles.cs.ucl.ac.uk:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-03.R1 /Users/mac/Desktop/Mapdamage/Museum
 
+  485  rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped/AAg-19-2016-03_SingleStrand /Users/mac/Desktop/Mapdamage/Modern
+  rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped_exp/AAg-10-2016-01_SingleStrand /Users/mac/Desktop/Mapdamage/Modern_exp
+  rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_modern_mapped_exp/AAg-10-2016-03_SingleStrand /Users/mac/Desktop/Mapdamage/Modern_exp
+  rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-01.R1 /Users/mac/Desktop/Mapdamage/Museum
+  rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_museum_MERGED/AAg-19-1900-03.R1 /Users/mac/Desktop/Mapdamage/Museum
 
+  
+  
+  
