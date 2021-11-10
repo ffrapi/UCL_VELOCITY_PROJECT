@@ -837,3 +837,12 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
   
   
   
+  ##9/11/21 
+  
+  #ANGSD 
+  
+  cd RefGenome2 #From species directory
+  awk '{print $1}' ../RefGenome/*.fna.fai >> regions
+cat regions |wc -l
+>52 #output these are used to run in the array
+
