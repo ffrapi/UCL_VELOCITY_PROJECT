@@ -35,86 +35,54 @@ chmod u+x 00_fastqc_raw_museum.sh
 
 
 
-#2: Concatenate museum samples
+##2: Concatenate museum samples
 
 mkdir 00_raw_reads_museum_FINAL/
 
-##list all samples that were sequenced twice
+##Submit following script: 
 
-ls 00_raw_reads_museum/ALLSAMPLES/*R1*gz |awk -F "/" '{print $NF}'|awk -F "_" '{print $1}' > museum1.names
-ls 00_raw_reads_museum2/ALLSAMPLES/*R1*gz |awk -F "/" '{print $NF}' |awk -F "_" '{print $1}' > museum2.names
+nano 00_Concat_Museum1andMuseum2.sh
 
-cat museum1.names museum2.names |sort |uniq --repeated > museum1.toconcat
+#!/bin/bash
+##################################
+# Alexandra Jansen van Rensburg
+# Last Modified 22/11/2021
+##################################
 
-for i in $(cat museum1.toconcat); do cp 00_raw_reads_museum/ALLSAMPLES/$i*gz 00_raw_reads_museum/; done
-
-##Move all the samples that were sequenced once to the 00_raw_reads_museum_concat
-
-ls 00_raw_reads_museum1/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museum1.names
-ls 00_raw_reads_museum1/ALLSAMPLES/*R1*gz | awk -F "/" '{print $NF}' |
-awk -F "_" '{print $1}' > museumconcat.names
+# Generates submission script to concatenate museum1 and museum2 samples together.
 
 
-diff museum1.names museumconcat.names | grep 'AAg' | sed 's/^>\ //'> museum1.tomove
+/SAN/ugi/LepGenomics/VelocityPipeline/wrapper/00_concat.sh \
+-I 00_raw_reads_museum1/ALLSAMPLES \
+-i 00_raw_reads_museum2/ALLSAMPLES \
+-S C3_Aricia_agestis_FP \
+-o 00_raw_reads_museum_FINAL \
+-N C3.concat.mus;
 
-wc -l museum1.tomove > count
+
+chmod u+x 00_Concat_Museum1andMuseum2.sh
+./00_Concat_Museum1andMuseum2.sh
+
+##Move all samples that were sequenced once to raw_museum_concat
+
+ls 00_raw_reads_museum1/ALLSAMPLES/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museum1.names
+ls 00_raw_reads_museum2/ALLSAMPLES/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museum2.names
+ls 00_raw_reads_museum_FINAL/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > concat.names
+
+#Create a list of samples to move from mus1 to the FINAL folder
+diff museum1.names museum2.names | grep '1900' | sed 's/^<\ //'> museum1.tomove
+
+#Check that none of these have been concatenated: 
+diff concat.names museum1.tomove
+
+count=$(wc -l museum1.tomove | awk '{print $1}')
 echo "number of samples to move:" $count
 
 for i in $(cat museum1.tomove); do cp 00_raw_reads_museum1/ALLSAMPLES/$i*gz 00_raw_reads_museum_FINAL; done
 
 
 
-
-nano 00_CollateAllMusSamples.sh
-
-#!/bin/bash
-###########################################
-# (c) Alexandra Jansen van Rensburg
-# last modified 12/07/2019 05:49
-###########################################
-
-## Cmd for concatenating all samples sequenced twice
-## Moves samples that were sequenced once to 00_raw_reads_museum_FINAL
-
-
-#$ -S /bin/bash ##shell to be used
-#$ -N C3.mus.concat.cutadapt  ##job name
-#$ -l tmem=16G #amount of memory you whish to request
-#$ -l h_vmem=16G #enforced amount of shell storage
-#$ -l h_rt=1:00:00 ##wall time
-#$ -j y  #concatenates error and output files (with prefix job1)
-
-
-#run job in working directory
-cd $SGE_O_WORKDIR
-
-#Define variables
-SPECIESDIR=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP
-PATH1=00_raw_reads_museum
-PATH2=00_raw_reads_museum2
-OUTPUT=$SPECIESDIR/00_raw_reads_museum_FINAL
-
-
-##Move all the samples that were sequenced once to the output directory
-
-ls $SPECIESDIR/$PATH1/ALLSAMPLES/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museum1.names
-ls $OUTPUT/*R1*gz | awk -F "/" '{print $NF}' | awk -F "_" '{print $1}' > museumconcat.names
-
-ls $SPECIESDIR/$OUTPUT/*gz | awk -F "/" '{print $NF}' | awk '{print substr($0,14)}' | awk -F ".concat" '{print $1}' | sort |uniq > TAILS
-
-
-diff museum1.names museumconcat.names | grep '^<' | sed 's/^<\ //'> museum1.tomove
-
-wc -l museum1.tomove > count
-echo "number of samples to move:" $count >> concat.mus.log
-
-while read TAIL1 <&1; do for i in $(cat museum1.tomove); do cp $SPECIESDIR/$PATH1/ALLSAMPLES/$i$TAIL1 $OUTPUT; done; done 1<TAILS
-
-#Concatenated samples are placed within this direcotry: 00_raw_reads_museum_FINAL
-
-
-
-#3: Trimmomatic - adapter removal 
+##3: Trimmomatic - adapter removal 
 
 nano 01a_Trimmomatic.sh  
 
@@ -142,3 +110,42 @@ nano 01a_Trimmomatic.sh
 
 ./01a_Trimmomatic.sh #And then submit the job
 
+
+
+
+##4: Adapter removal
+
+#Create directories for each population: 
+
+mkdir 01b_AdapterRemoval_modc
+mkdir 01b_AdapterRemoval_mode
+mkdir 01b_AdapterRemoval_mmuseum
+
+nano 01b_AdapterRemover_modc.sh 
+
+
+#!/bin/bash
+##################################
+# Alexandra Jansen van Rensburg
+# Last Modified 17/11/2021
+##################################
+#v1
+
+# Generates submission script for second part of the trimming process using AdapterRemoval
+# Romain found that the Cutadapt step (01a) does not remove all of the adapter sequence. We've changed the pipeline to use$
+# AdapterRemoval will merge any overlapping reads as well, which is needed for the museum samples.
+
+
+/SAN/ugi/LepGenomics/VelocityPipeline/wrapper/parallel_adapterremoval_UCL.sh \
+-i /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01a_Trimmomatic_modc \
+-o /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/01b_AdapterRemoval_modc \
+-n 1 -t 1 -m 8 -N AdaptRem.modc;
+
+chmod u+x 01b_AdapterRemover*sh
+chmod g+x 01b_AdapterRemover*sh
+
+./01b_AdapterRemover_modc.sh
+
+
+
+##4: Map to reference genome
