@@ -111,7 +111,13 @@ nano 01a_Trimmomatic.sh
 ./01a_Trimmomatic.sh #And then submit the job
 
 
-
+##Put results in different files
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $1}' >> TrimmomaticStats_names.log
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $4}' > TrimmomaticStats1.log 
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $7}' >> TrimmomaticStats2.log
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $8}' >> TrimmomaticStats3.log
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $20}' >> TrimmomaticStats4.log
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $21}' >> TrimmomaticStats5.log
 
 ##4: Adapter removal
 
@@ -233,7 +239,7 @@ fi
 
 echo "time $BWA mem $REF $INPUT/$NAME | samtools sort -o  $OUTPUT/$NAME.bam" >> map_modc.log
 time $BWA mem $REF $INPUT/$NAME.collapsed | samtools sort -o  $OUTPUT/$NAME.bam
-    
+   
 
 
 
