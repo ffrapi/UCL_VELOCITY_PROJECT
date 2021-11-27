@@ -240,6 +240,10 @@ fi
 echo "time $BWA mem $REF $INPUT/$NAME | samtools sort -o  $OUTPUT/$NAME.bam" >> map_modc.log
 time $BWA mem $REF $INPUT/$NAME.collapsed | samtools sort -o  $OUTPUT/$NAME.bam
    
+   
+   ls 01b_AdapterRemoval_modc_unmerged/*R1_paired* > modc.names
+sed -i 's:01b_AdapterRemoval_modc_unmerged/::g' modc.names
+sed -i 's:.pair1.truncated::g'  modc.names
 
 
 
