@@ -196,6 +196,15 @@ fi
 
 ##Map 
 
+ls 01b_AdapterRemoval_mode_unmerged/*R1_paired.fastq.gz > mode.names
+sed -i 's:01b_AdapterRemoval_mode_unmerged/::g' mode.names
+sed -i 's:.pair1.truncated::g'  mode.names
+
+ls 01b_AdapterRemoval_modc_unmerged/*R1_paired.fastq.gz > modc.names   #TELL ALEX TO ADD fastq.g after *R1_paired* because the log files are also added to the mus.names file
+sed -i 's:01b_AdapterRemoval_modc_unmerged/::g' modc.names
+sed -i 's:.pair1.truncated::g'  modc.names
+
+
 nano 02a_MapwithBWAmem.ARRAY_modc_TrimTest
 
 #!/bin/bash
