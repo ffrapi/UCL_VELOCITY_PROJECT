@@ -196,6 +196,11 @@ fi
 
 ##Map 
 
+ls 01b_AdapterRemoval_museum/*R1_paired.fastq.gz > mus.names
+sed -i 's:01b_AdapterRemoval_museum/::g' mus.names
+sed -i 's:.pair1.truncated::g'  mus.names
+
+
 ls 01b_AdapterRemoval_mode_unmerged/*R1_paired.fastq.gz > mode.names
 sed -i 's:01b_AdapterRemoval_mode_unmerged/::g' mode.names
 sed -i 's:.pair1.truncated::g'  mode.names
