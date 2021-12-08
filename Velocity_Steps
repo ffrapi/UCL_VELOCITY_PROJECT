@@ -270,6 +270,9 @@ sed -i 's:.pair1.truncated::g'  modc.names
 ##2: Index the bam files using index.museum.sh
 ##3: Create mus.bamlist with all the folders that were copied
 ##4: Run Theta.sh (output: txt files etc)
+##5: Copy .txt files to computer
+
+##1: 
 
 mkdir 04a_ATLAS
 mkdir MUS
@@ -278,7 +281,9 @@ mkdir MODC
 
 cd 02a_mapped_museum/02a_mapped_museum
 cp *collapsed.gz/*rescaled.bam 04a_ATLAS/MUS #copy all the rescaled files (after mapdamage) to the folder where theta will be run in 
-#Need to index all the bam files before theta is run 
+
+
+##2: Need to index all the bam files before theta is run 
 nano index.museum.sh
 
 #!/bin/bash
@@ -302,10 +307,10 @@ for i in $(ls *bam); do samtools index $i; done
 
 qsub index.museum.sh
 
-#After indexing, we can create the mus.bamlist: 
+##3: After indexing, we can create the mus.bamlist: 
 ls *rescaled.bam >mus.bamlist
 
-#Run Theta.sh 
+##4: Run Theta.sh 
 nano Theta.sh
 #!/bin/bash
 #$ -S /bin/bash
@@ -337,5 +342,7 @@ TASK=theta
 #Run analysis
 while IFS=  read -r line; do $ATLAS task=$TASK bam=$line; done < $INPUT
 
+
+##5: Copy txt files to computer from cluster
 
 
