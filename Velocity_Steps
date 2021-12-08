@@ -263,3 +263,79 @@ sed -i 's:.pair1.truncated::g'  modc.names
 
 
 
+###ATLAS
+
+#Museum samples
+##1: Copy all files from mapdamage (i.e. rescaled.bam) to the ATLAS folder
+##2: Index the bam files using index.museum.sh
+##3: Create mus.bamlist with all the folders that were copied
+##4: Run Theta.sh (output: txt files etc)
+
+mkdir 04a_ATLAS
+mkdir MUS
+mkdir MODE
+mkdir MODC
+
+cd 02a_mapped_museum/02a_mapped_museum
+cp *collapsed.gz/*rescaled.bam 04a_ATLAS/MUS #copy all the rescaled files (after mapdamage) to the folder where theta will be run in 
+#Need to index all the bam files before theta is run 
+nano index.museum.sh
+
+#!/bin/bash
+#$ -S /bin/bash
+#$ -N mus.index  ##job name
+#$ -l tmem=16G #RAM
+#$ -l h_vmem=16G #enforced limit on memory shell usage
+#$ -l h_rt=1:00:00 ##wall time.
+#$ -j y  #concatenates error and output files (with prefix job1)
+##$ -t 1-48
+
+#run job in working directory
+cd $SGE_O_WORKDIR
+
+
+##Software
+export PATH=/share/apps/genomics/samtools-1.9/bin:$PATH
+export LD_LIBRARY_PATH=/share/apps/genomics/samtools-1.9/lib:$LD_LIBRARY_PATH
+
+for i in $(ls *bam); do samtools index $i; done
+
+qsub index.museum.sh
+
+#After indexing, we can create the mus.bamlist: 
+ls *rescaled.bam >mus.bamlist
+
+#Run Theta.sh 
+nano Theta.sh
+#!/bin/bash
+#$ -S /bin/bash
+#$ -N C3.Mus.ATLAS.GlobDiv  ##job name
+#$ -l tmem=16G #RAM
+#$ -l h_vmem=16G #enforced limit on shell memory usage
+#$ -l h_rt=3:00:00 ##wall time.
+#$ -j y  #concatenates error and output files (with prefix job1)
+
+
+#Run on working directory
+cd $SGE_O_WORKDIR
+
+
+#Path to software
+export LD_LIBRARY_PATH=/share/apps/openblas-0.3.6/lib:/share/apps/armadillo-9.100.5/lib64:$LD_LIBRARY_PATH
+ATLAS=/share/apps/genomics/atlas-0.9/atlas
+
+
+#Define variables
+SHAREDFOLDER=/SAN/ugi/LepGenomics
+SPECIES=C3_Aricia_agestis_FP
+REF=$SHAREDFOLDER/$SPECIES/RefGenome2/GCA_905147365.1_ilAriAges1.1_genomic.fna
+INPUT=$SHAREDFOLDER/$SPECIES/04_ATLAS/MUS/mus.bamlist
+OUTPUT=$SHAREDFOLDER/$SPECIES/04_ATLAS/MUS
+TASK=theta
+
+
+#Run analysis
+while IFS=  read -r line; do $ATLAS task=$TASK bam=$line; done < $INPUT
+
+
+
