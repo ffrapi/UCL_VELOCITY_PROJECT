@@ -345,4 +345,14 @@ while IFS=  read -r line; do $ATLAS task=$TASK bam=$line; done < $INPUT
 
 ##5: Copy txt files to computer from cluster
 
+#OPEN WINDOW ONE: 
+ssh -l fpitsill -L 3000:morecambe.cs.ucl.ac.uk:22 fpitsill@knuckles.cs.ucl.ac.uk 
+
+#OPEN WINDOW TWO AND COPY FILES TO LOCAL DIRECTORY
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/*txt.gz /Users/mac/Desktop/MUS_ATLAS
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/AAg-19-1900-01_190312_L005.collapsed.gz.realn.rescaled_theta_estimates.txt.gz /Users/mac/Desktop/MUS_ATLAS
+
+
+
+
 
