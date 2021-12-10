@@ -353,6 +353,7 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/AAg-19-1900-01_190312_L005.collapsed.gz.realn.rescaled_theta_estimates.txt.gz /Users/mac/Desktop/MUS_ATLAS
 
 
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODE/*txt.gz /Users/mac/Desktop/MODE_ATLAS
 
 
 
