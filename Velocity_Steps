@@ -440,3 +440,4 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODC/TEST/*txt.gz /Users/mac/Desktop/MODC_ATLAS
 
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02a_mapped_MODC/02a_mapped_MODC/MapDamage/*gz /Users/mac/Desktop/MODC_MapDamage
