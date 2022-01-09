@@ -298,6 +298,12 @@ for i in $(ls *bam); do samtools index $i; done
 
 ##4: Run Splitmerge
 
+###1: Index bam files
+###2: Create RG.txt: 
+nano RG.txt
+C3mode paired
+###3: Run script:
+
 nano  04b_ATLAS_splitmerge_mode.sh 
  #!/bin/bash
 #$ -S /bin/bash
