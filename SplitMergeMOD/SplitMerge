@@ -1,1 +1,43 @@
+#SplitMerge for Modern populations 
 
+#OVERVIEW: https://bitbucket.org/wegmannlab/atlas/wiki/splitMerge
+#This task should be run before any consecutive variant discovery or population genetic tool to split single end read groups by length and to merge paired end reads. This task is a combination of tasks splitRGByLength and mergeReads. 
+#You need to specify which read groups should be considered for splitting or merging. Others will just be written to the BAM as they are.
+#Read Groups: a set of reads that are generated from a single run of a sequencing instrument.
+#Read introduction of this paper for understanding paired-end reads: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3933873/pdf/btt593.pdf
+
+
+#INPUT: realn.bam (for MODC/E that have not been Downsampled): AAg-10-2016-36_L001.pair1.truncated.gz.realn.bam
+#INPUT: downsampled.A.bam (for MODC/E that have been Downsampled to a depth of A = 0.2X, 0.4X, 0.6X, 0.8X), example: AAg-19-2016-40.realn.bam.fullLR75.Downsampled.0.2X.bam
+
+#OUTPUT: realn_mergedReads.bam (Not Downsampled): AAg-19-2016-38_L002.pair1.truncated.gz.realn_mergedReads.bam
+#OUTPUT: Downsampled.A_mergedReads.bam (Downsampled, A = 0.2X, 0.4X, 0.6X, 0.8X): AAg-19-2016-40.realn.bam.fullLR75.Downsampled.0.2X_mergedReads.bam
+
+
+#STEPS: 
+##1: Index Files
+##2: Create RG.txt file
+##3: Create modc.bamlist.splitmerge
+##4: Modify script
+
+#STEP-BY-STEP: 
+##1: Index files using Index.sh script
+nano Index.sh
+
+##2: Create RG.txt file
+nano RG.txt
+C3mode paired
+
+##3: Create modc.bamlist.splitmerge
+ls *realn.bam > modc.bamlist.splitmerge #For Not Downsampled Data example:
+#####AAg-10-2016-01_L001.pair1.truncated.gz.realn.bam
+#####AAg-10-2016-02_L001.pair1.truncated.gz.realn.bam
+ls *downsampled.A.bam > modc.bamlist.splitmerge #For downsampled data, each sample will have 5 bam files
+#####AAg-10-2016-01.realn.bam
+#####AAg-10-2016-01.realn.bam.fullLR75.Downsampled.0.2X.bam
+#####AAg-10-2016-01.realn.bam.fullLR75.Downsampled.0.4X.bam
+#####AAg-10-2016-01.realn.bam.fullLR75.Downsampled.0.6X.bam
+#####AAg-10-2016-01.realn.bam.fullLR75.Downsampled.0.8X.bam
+
+##4:Modify script
+nano 04b_ATLAS_splitmerge_mode.sh
