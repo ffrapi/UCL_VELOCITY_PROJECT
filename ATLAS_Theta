@@ -25,7 +25,7 @@
 #'LL': the likelihood of the MLE θ estimate
 
 
-#Steps: 
+#STEPS: 
 
 #Museum samples
 ##1: Copy all files from mapdamage (i.e. rescaled.bam) to the ATLAS folder
@@ -41,6 +41,7 @@
 ##3: Run Theta.sh (output: txt.files) 
 ##5: Copy .txt files to computer 
 
+#STEP-BY-STEP PROCESS
 ##1: 
 
 mkdir 04a_ATLAS
@@ -138,8 +139,6 @@ NAME=$(sed "${SGE_TASK_ID}q;d" modc.bamlist)
 #while IFS=  read -r line; do $ATLAS task=$TASK bam=$INPUT/$line; done < $INPUT
 
 $ATLAS task=$TASK bam=$INPUT/${NAME}
-
-
 
 
 
