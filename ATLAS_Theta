@@ -1,0 +1,25 @@
+#Estimating the Theta parameter
+
+#Theta: estimates heterozigosity
+
+
+#OVERVIEW: https://bitbucket.org/wegmannlab/atlas/wiki/Population%20Genetic%20Parameters%3A%20theta
+#This task infers the stationary base frequencies π={πA,πC,πG,πT}, along with the rate of substitutions θ=2Tμ along the genealogy connecting the two alleles of an individual within a genomic window (default=non overlapping windows of 1Mbp). 
+#Here, T corresponds to the time to the most recent common ancestor of the two lineages and μ to the mutation rate per base pair per generation. 
+#It is not possible to infer T and μ independently, and we therefore only estimate the compound substitution rate θ from the data. 
+#To estimate θ, we use Felsenstein’s 1981 model of substitutions.
+
+
+#INPUT: Modern populations (MODC and MODE): MergedReads.bam (From Splitmerge)
+#INPUT: Museum population (MUS): Rescaled.bam (From MapDamage)
+
+#OUTPUT: A text file containing the following information/columns: 
+#'CHR': Chrosomome (For Aricia agestis the prefix is LR
+#'Start' +'end': window start and end
+#'Depth': coverage in window
+#'fracMissing': proportion of missing data
+#'fracTwoOrMore': proportion of sites covered at least twice
+#'pi(A)' +pi(C) + pi(G) + pi(T): the nucleotide frequencies
+#'Theta_MLE': the maximum likelihood estimate for θ
+#'THeta_C95_l+u?': the Fisher confidence intervals for θ
+#'LL': the likelihood of the MLE θ estimate
