@@ -2,4 +2,42 @@
 
 #OVERVIEW: Why do we need to downsample? What will the results show us? Why are only modern data downsampled? 
 
-#INPUT: 
+#INPUT: realn.bam files (for both MODC and MODE)
+#OUTPUT: Downsampled.A.bam, where A = 0.2X, 0.4X, 0.6X, 0.8X.
+#Hence, for each realn.bam file there will be 4 outputs, corresponding to each depth (0.2X, 0.4X etc)
+
+#STEPS (MODC example):
+##1: Create Downsampled folders and move all the realn.bam files here
+##2: Create modc.names.100, which is basically all realn.bam files repeated 4 times each 
+##3: Create modc.prop.downsample.X, where X is the number of samples. This is a file that repeats these four values, 0.2, 0.4, 0.6, 0.8, X times in the file.
+##4: Create modc.propnames.X, where X is the number of samples. This is a file that repeats these four values, 0.2X, 0.4X, 0.6X, 0.8X, X times in the file. 
+##5: Modify Downsample.sh script - may need to increase RAM and walltime
+
+#STEP-BY-STEP:
+##1: Downsampled folders and moving realn.bam files
+
+mkdir 04_Downsampled_MODC
+mkdir 04_Downsampled_MODE
+mv 02a_mapped_MODC/02a_mapped_MODC/*realn.bam C3_Aricia_agestis_FP/04_Downsampled_MODC
+
+##2: modc.names.100
+ls *realn.bam > modc.names.100 #copy paste these files 3 times so that each realn.bam is repeated 4 times
+
+##3: modc.prop.downsample.40 (MODC has 40 samples)
+nano modc.prop.downsample.40
+0.2
+0.4
+0.6
+0.8
+0.2
+0.4
+0.6
+0.8
+#Repeat each number 40 times in this file
+
+##4: modc.propnames.40 
+nano modc.propnames.40
+#Repeat 0.2X, 0.4X, 0.6X, 0.8X 40 times in this files as in the modc.prop.downsample.40
+
+##5 Modify script Downsample.sh - found in folder
+
