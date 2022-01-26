@@ -455,3 +455,5 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODE_Downsampled/*txt.gz /Users/mac/Desktop/MODE_ATLAS/Downsampled
 
+
+for i in $(ls *rescaled.bam); do ls $i >> mus.flagstat.log && samtools flagstat $i >> mus.flagstat.log; done
