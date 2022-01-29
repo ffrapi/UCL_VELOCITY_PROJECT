@@ -1,0 +1,8 @@
+#Processing bam files
+
+#4 steps: 
+##1: Add Read Group Information
+##2: Mark Duplicate Reads
+##3: Local Realignment
+##4: Validate bam files
+
