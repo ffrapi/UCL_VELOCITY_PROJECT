@@ -1,6 +1,7 @@
 #Downsampling Modern Data
 
 #OVERVIEW: Why do we need to downsample? What will the results show us? Why are only modern data downsampled? 
+https://gatk.broadinstitute.org/hc/en-us/articles/360047717551-Downsampling-in-GATK
 
 #INPUT: realn.bam files (for both MODC and MODE)
 #OUTPUT: Downsampled.A.bam, where A = 0.2X, 0.4X, 0.6X, 0.8X.
