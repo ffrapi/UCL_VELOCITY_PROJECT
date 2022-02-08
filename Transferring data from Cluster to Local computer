@@ -10,3 +10,8 @@ rsync -auve "ssh -p 3000" [username]@localhost:[pathway to files on your cluster
 #Examples:
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/*txt.gz /Users/mac/Desktop/MUS_ATLAS #Here, I am copying the *txt.gz files from my cluster to the folder MUS_ATLAS on the Desktop of my local computer
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/TEST/AAg-19-1900-47_191121_L003.collapsed.gz.realn.rescaled_theta_estimates.txt.gz /Users/mac/Desktop/MUS_ATLAS #Here, I am copying a specific file from my cluster to the MUS_ATLAS folder
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODC_Downsampled/MODC_0.2X_testCL.txt /Users/mac/Desktop/downsampled_TEST         
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODC_Downsampled/MODC_0.4X_testCL.txt /Users/mac/Desktop/downsampled_TEST         
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MODC_Downsampled/MODC_0.6X_testCL.txt /Users/mac/Desktop/downsampled_TEST         
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/MUS_testCL.txt /Users/mac/Desktop/downsampled_TEST         
