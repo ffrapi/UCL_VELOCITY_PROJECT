@@ -1,0 +1,24 @@
+#FastQC - A quality control
+
+#OVERVIEW: FastQC aims to provide a simple way to do some quality control checks on raw sequence data coming from high throughput sequencing pipelines. 
+#It provides a modular set of analyses which you can use to give a quick impression of whether your data has any problems of which you should be aware before doing any further analysis.
+#Can provide a quick overview to tell you in which areas there may be problems
+The main functions of FastQC are
+
+Import of data from BAM, SAM or FastQ files (any variant)
+Providing a quick overview to tell you in which areas there may be problems
+Summary graphs and tables to quickly assess your data
+Export of results to an HTML based permanent report
+Offline operation to allow automated generation of reports without running the interactive application
+
+#INPUT: fastqc.gz files (for all populations)
+#OUTPUT: fastqc.html + fastqc.gz
+#The HTML file which is saved is a self-contained document with all of the graphs embedded into it, so you can distribute this single file. Alongside the HTML file is a zip file (with the same name as the HTML file, but with .zip added to the end). 
+#This file contains the graphs from the report as separate files but also contains data files which are designed to be easily parsed to allow for a more detailed and automated evauation of the raw data on which the QC report is built.
+
+#STEPS (MODC example):
+##1: Create Downsampled folders and move all the realn.bam files here
+##2: Create modc.names.100, which is basically all realn.bam files repeated 4 times each 
+##3: Create modc.prop.downsample.X, where X is the number of samples. This is a file that repeats these four values, 0.2, 0.4, 0.6, 0.8, X times in the file.
+##4: Create modc.propnames.X, where X is the number of samples. This is a file that repeats these four values, 0.2X, 0.4X, 0.6X, 0.8X, X times in the file. 
+##5: Modify Downsample.sh script - may need to increase RAM and walltime
