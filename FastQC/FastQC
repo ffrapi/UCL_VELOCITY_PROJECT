@@ -17,8 +17,32 @@ Offline operation to allow automated generation of reports without running the i
 #This file contains the graphs from the report as separate files but also contains data files which are designed to be easily parsed to allow for a more detailed and automated evauation of the raw data on which the QC report is built.
 
 #STEPS (MODC example):
-##1: Create Downsampled folders and move all the realn.bam files here
-##2: Create modc.names.100, which is basically all realn.bam files repeated 4 times each 
-##3: Create modc.prop.downsample.X, where X is the number of samples. This is a file that repeats these four values, 0.2, 0.4, 0.6, 0.8, X times in the file.
-##4: Create modc.propnames.X, where X is the number of samples. This is a file that repeats these four values, 0.2X, 0.4X, 0.6X, 0.8X, X times in the file. 
-##5: Modify Downsample.sh script - may need to increase RAM and walltime
+##1: Create 00_fastqc.sh script for each population
+##2: Modify input and output in script to the raw_reads directory for each population
+##3: Modify -t X (where X should be the number of samples to run FastQC on)
+##4: Use "./fast.qc.sh" to get a script to submit to the server 
+##5: Submit the produced script using qsub [script]
+##6: Check the results by moving the .html files to your local computer
+
+
+##Structure of the .html file: 
+https://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/2%20Basic%20Operations/2.2%20Evaluating%20Results.html
+https://www.bioinformatics.babraham.ac.uk/projects/fastqc/good_sequence_short_fastqc.html#M1
+https://www.bioinformatics.babraham.ac.uk/projects/fastqc/bad_sequence_fastqc.html#M8
+https://dnacore.missouri.edu/PDF/FastQC_Manual.pdf
+
+#1:Basic Statistics Structure (Example):
+Measure	Value
+Filename:	AAg-10-2016-23_L001_R1.fastq.gz (The original filename of the file whcih was analysed)
+File type	Conventional base calls (States whether the file contains actual base calls or colorspace data which ahd to be converted to base calls)
+Encoding	Sanger / Illumina 1.9 (States which ASCII encoding of quality values was found in this file)
+Total Sequences	10087056 (Count of total number of sequences processed)
+Sequences flagged as poor quality	0
+Sequence length	150 (Provides teh length of the shortest and longest sequence in the set - if all sequences are the same length only one value is reported)
+%GC	36 (Overall %GC of all bases in all sequences)
+
+#2: Per Base Sequence Quality
+##Shows an overview of the range of quality values across all bases at each position int he file
+
+#3:  Per Sequence Quality Scores:
+##allows you to see if a subset of the sequences have low quality values - should represent a small percentage of all the sequences
