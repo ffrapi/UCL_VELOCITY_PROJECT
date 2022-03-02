@@ -14,6 +14,8 @@
 #OUTPUT: Downsampled.A_mergedReads.bam (Downsampled, A = 0.2X, 0.4X, 0.6X, 0.8X): AAg-19-2016-40.realn.bam.fullLR75.Downsampled.0.2X_mergedReads.bam
 
 
+#TIME: Ranges approximately from 4-20 minutes per sample
+
 #STEPS: 
 ##1: Index Files
 ##2: Create RG.txt file
