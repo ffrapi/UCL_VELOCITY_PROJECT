@@ -1,0 +1,153 @@
+#Estimating the Theta parameter
+
+#Theta: estimates heterozigosity
+
+
+#OVERVIEW: https://bitbucket.org/wegmannlab/atlas/wiki/Population%20Genetic%20Parameters%3A%20theta
+#This task infers the stationary base frequencies π={πA,πC,πG,πT}, along with the rate of substitutions θ=2Tμ along the genealogy connecting the two alleles of an individual within a genomic window (default=non overlapping windows of 1Mbp). 
+#Here, T corresponds to the time to the most recent common ancestor of the two lineages and μ to the mutation rate per base pair per generation. 
+#It is not possible to infer T and μ independently, and we therefore only estimate the compound substitution rate θ from the data. 
+#To estimate θ, we use Felsenstein’s 1981 model of substitutions.
+
+
+#INPUT: Modern populations (MODC and MODE): MergedReads.bam (From Splitmerge)
+#INPUT: Museum population (MUS): Rescaled.bam (From MapDamage)
+
+#OUTPUT: A text file containing the following information/columns: 
+#'CHR': Chrosomome (For Aricia agestis the prefix is LR
+#'Start' +'end': window start and end
+#'Depth': coverage in window
+#'fracMissing': proportion of missing data
+#'fracTwoOrMore': proportion of sites covered at least twice
+#'pi(A)' +pi(C) + pi(G) + pi(T): the nucleotide frequencies
+#'Theta_MLE': the maximum likelihood estimate for θ
+#'THeta_C95_l+u?': the Fisher confidence intervals for θ
+#'LL': the likelihood of the MLE θ estimate
+
+
+#STEPS: 
+
+#Museum samples
+##1: Copy all files from mapdamage (i.e. rescaled.bam) to the ATLAS folder
+## Index the bam files using index.museum.sh
+##3: Create mus.bamlist with all the folders that were copied 
+##4: Run Theta.sh (output: txt files etc)
+##5: Copy .txt files to computer
+
+#Modern samples
+##1: Copy all files from SplitMerge (i.e. MergedReads.bam) (Either from Mapped_MODC/E or Downsampled_MODC/E)
+##(Files have been indexed previously)
+##2: Create modc.bamlist or mode.bamlist with the full name of the files used to calculate theta
+##3: Run Theta.sh (output: txt.files) 
+##5: Copy .txt files to computer 
+
+#STEP-BY-STEP PROCESS
+##1: 
+
+mkdir 04a_ATLAS
+#within 04a_ATLAS:
+mkdir MUS
+mkdir MODE
+mkdir MODE_Downsampled
+mkdir MODC
+mkdir MODC_Downsampled #for the Downsampled MODC files
+
+
+#####MUSEUM
+cd 02a_mapped_museum/02a_mapped_museum
+mv *collapsed.gz/*rescaled.bam 04a_ATLAS/MUS #copy all the rescaled files (after mapdamage) to the folder where theta will be run in 
+##index all the bam files before theta is run for museum samples (index.museum.sh)
+
+                                                nano index.museum.sh
+
+                                                #!/bin/bash
+                                                #$ -S /bin/bash
+                                                #$ -N mus.index  ##job name
+                                                #$ -l tmem=16G #RAM
+                                                #$ -l h_vmem=16G #enforced limit on memory shell usage
+                                                #$ -l h_rt=1:00:00 ##wall time.
+                                                #$ -j y  #concatenates error and output files (with prefix job1)
+                                                ##$ -t 1-48
+
+                                                #run job in working directory
+                                                cd $SGE_O_WORKDIR
+
+
+                                                ##Software
+                                                export PATH=/share/apps/genomics/samtools-1.9/bin:$PATH
+                                                export LD_LIBRARY_PATH=/share/apps/genomics/samtools-1.9/lib:$LD_LIBRARY_PATH
+
+                                                for i in $(ls *bam); do samtools index $i; done
+
+                                                qsub index.museum.sh
+
+#####MODERN 
+cd 02a_mapped_MODC/02a_mapped_MODC
+mv *MergedReads* 04a_ATLAS/MODC
+
+
+##3: Create Mus.bamlsit, MODC/E.bamlist:
+
+ls *rescaled.bam > mus.bamlist
+##AAg-19-1900-01_191121_L003.collapsed.gz.realn.rescaled.bam
+##AAg-19-1900-47_191121_L003.collapsed.gz.realn.rescaled.bam
+
+ls *mergedReads.bam > modc.bamlist
+##AAg-19-2016-01_L002.pair1.truncated.gz.realn_mergedReads.bam
+##AAg-19-2016-02_L002.pair1.truncated.gz.realn_mergedReads.bam
+
+
+
+##4: Run Theta.sh 
+  #Might need to increase Walltime and RAM when running Theta on the modern Downsampled files
+  
+nano Theta.sh
+#!/bin/bash
+#$ -S /bin/bash
+#$ -N C3.MODC.ATLAS.GlobDiv  ##job name
+#$ -l tmem=16G #RAM
+#$ -l h_vmem=16G #enforced limit on shell memory usage
+#$ -l h_rt=10:00:00 ##wall time.
+#$ -j y  #concatenates error and output files (with prefix job1)
+#$ -t 1-40
+
+
+#Run on working directory
+cd $SGE_O_WORKDIR
+
+
+#Path to software
+export LD_LIBRARY_PATH=/share/apps/openblas-0.3.6/lib:/share/apps/armadillo-9.100.5/lib64:$LD_LIBRARY_PATH
+ATLAS=/share/apps/genomics/atlas-0.9/atlas
+
+
+#Define variables
+SHAREDFOLDER=/SAN/ugi/LepGenomics
+SPECIES=C3_Aricia_agestis_FP
+REF=$SHAREDFOLDER/$SPECIES/RefGenome2/GCA_905147365.1_ilAriAges1.1_genomic.fna
+INPUT=$SHAREDFOLDER/$SPECIES/04_ATLAS/MODC/modc.bamlist
+OUTPUT=$SHAREDFOLDER/$SPECIES/04_ATLAS/MODC
+TASK=theta
+
+
+
+##Define ARRAY
+NAME=$(sed "${SGE_TASK_ID}q;d" modc.bamlist)
+
+
+#Run analysis
+#while IFS=  read -r line; do $ATLAS task=$TASK bam=$INPUT/$line; done < $INPUT
+
+$ATLAS task=$TASK bam=$INPUT/${NAME}
+
+
+
+##5: Copy txt files to computer from cluster
+
+#OPEN WINDOW ONE: 
+ssh -l fpitsill -L 3000:morecambe.cs.ucl.ac.uk:22 fpitsill@knuckles.cs.ucl.ac.uk 
+
+#OPEN WINDOW TWO AND COPY FILES TO LOCAL DIRECTORY
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/04_ATLAS/MUS/*txt.gz /Users/mac/Desktop/MUS_ATLAS
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03.1_ANGSD_Dec2021/03.1_SAF/*gz /Users/mac/Desktop/ANGSD
