@@ -1,1 +1,35 @@
 #TRrimmomatic 
+
+
+#OVERVIEW: Trimmomatic performs a variety of useful trimming tasks for illumina paired-end and single ended data.
+#Our data is Paired-end read using HighSeq.
+#The selection of trimming steps and their associated parameters are supplied on the command line as you can see in the script
+#For manual check: http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
+
+##INPUT: fastqc.gz files (for all populations) (the raw reads of each population)
+##OUTPUT: 4 fastq.gz files per individual: .R1_paired (Forward paired), .R1_unpaired (Forward unpaired), .R2_paired (reverse paired), .R2_unpaired (reverse unpaired)(For all 3 populations) 
+##OUTPUT: a log file for each individual, that contains details about the trimmomatic process and the sequences that were clipped?
+
+
+#STEPS:
+##1: Create directories for each population 01a_Trimmomatic
+##2: Modify the script Trimommatic.sh
+##3: Generate a submission script by using ./Trimmomatic.sh
+##4: Collect information about all populations 
+
+##STEP BY STEP: 
+##Create directories: 
+
+mkdir 01a_Trimommatic_mode
+mkdir 01a_Trimommatic_modc
+mkdir 01a_Trimommatic_mus
+
+##2: Modify the script Trimommatic.sh
+#a: Change the input and the output to the 00_raw_reads folder for each population, and the output to the trimmomatic folder
+
+##3: Generate submission script
+./01a_Trimmomatic.sh
+
+##4: Generating information 
+grep "Both Surviving" 01a_Trimmomatic*/*log |awk '{print $1, $4, $7, $8, $20, $21}' >> TrimmomaticStats.log
+#This will write the sample name and number of read pairs surviving trimming to a file called TrimmomaticStats.
