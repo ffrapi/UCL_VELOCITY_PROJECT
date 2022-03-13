@@ -1,1 +1,18 @@
+#DISCOAL
 
+##OVERVIEW: I'ts a coalescent simulator program capable of simulating models with recombination, selective sweeps, neutral fixation etc
+
+##Downloading discoal: 
+
+##Download all folders from github repository: https://github.com/kr-colab/discoal (Code-Download zip) 
+##Unzip folder and access this folder using terminal and cd
+##Running discoal: 
+
+./discoal [options]
+
+##Measuring statistics: 
+##Download msdir from website: https://uchicago.app.box.com/s/l3e5uf13tikfjm7e1il1eujitlsjdx13 (ms.tar.gz)
+##Access this folder using terminal and copy the discoal.exe file from the discoal folder to the msdir folder on your local computer - in this way you can use discoal and ms at the same time to measure summary statistics as discoal does not have such a function.
+
+./ discoal [options] | ./summary_stats.c 
+eg: msdir mac$ ./discoal 40 10 100 -t 0.028 | ./sample_stats.c
