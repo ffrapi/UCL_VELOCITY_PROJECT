@@ -10,6 +10,16 @@
 
 ./discoal [options]
 
+#Exact measures to use for discoal - Aricia agestis
+./discoal 40 100 10000 -t 0.028 -wn 0.05 -x 0.5 -a 2000
+-t 0.028: Estimated, -t = 4N0u, u = mutation rate per generation (2.8e-9 for Heliconius from Keightley et al 2015), N0 = unknown (must use demographic model for estimating this?) - assume 1e6?
+
+ ./discoal 40 1000 100000 -t 0.028 -wd 0.05 -x 0.5 -a 2000 > discoal.txt
+ ./discoal 40 1000 100000 -t 0.028 -wn 0.05 -x 0.5 -a 2000 > discoal.neutral.txt
+ 
+ ./discoal 10 4000 220000 -t 0.028 -wd 0.5 -a 40000 | ./sample_stats.c > stats.txt
+./discoal 10 4000 220000 -t 0.028 -wn 0.5 -a 40000 | ./sample_stats.c > stats.neutral.txt
+
 ##Measuring statistics: 
 ##Download msdir from website: https://uchicago.app.box.com/s/l3e5uf13tikfjm7e1il1eujitlsjdx13 (ms.tar.gz)
 ##Access this folder using terminal and copy the discoal.exe file from the discoal folder to the msdir folder on your local computer - in this way you can use discoal and ms at the same time to measure summary statistics as discoal does not have such a function.
