@@ -845,3 +845,34 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 cat regions |wc -l
 >52 #output these are used to run in the array
 
+
+
+
+#March22
+##DISCOAL
+#GET generateSimLaunchScript.py from the diploshic website: https://github.com/kr-colab/diploSHIC
+#Change no of sites, per site mutation rate to 2.9e-9 (mutation rate of Heliconius and Drosophila), sample Size to pop sample size, eg for Aricia agestis MODC=40, gensPerYear=2 for Aricia agestis, traning sampleNUmber 2000, keep everything else as is given 
+
+trainingSampleNumber = 2000 #the number of simulation replicates we want to generate for each file in our training set
+testSampleNumber = 1000 #the number of simulations to create for each file in the test set
+sampleSize = 40 #the number of individuals in our population sample
+numSites = 260000 #total number of sites in our simulated window (i.e. S/HIC's subwindow size * 11)
+u = 2.9e-9 #per-site mutation rate (used to calculate mean theta)
+gensPerYear = 2 #number of generations per year
+maxSoftSweepInitFreq = 0.1 #maximum initial selected frequency for soft sweeps
+tauHigh = 0.05 #maximum FIXATION (not mutation) time (in units of 4N generations ago) in the past
+rhoOverTheta = 5.0 #crossover rate over mut rate (used to calculate mean rho)
+
+nano popSize.txt
+0 1000
+#exit, this file contains a 2 column tab separated file of the populations history of size, column 1 is time and column2 is the eyar at which teh pop size changed to that time
+#first line should correspond to the present day population size (year=0)
+#if no population changes are simulates then no adidtional lines are required
+
+python generateSimLaunchScript.py popSize.txt trainingOutDir=train testOutDir=test >> diplo.sh
+nano diplo.sh
+
+#in diplo.sh add the following command below bin/bash: 
+ Assertion `currentTrajectory' failed.#in addition, in front of every discoal put a $ sign
+#change all directories to just train/*msOut, test/*msOut (remove trainingOutDir= and testOutDir=)
+./diplo.sh
