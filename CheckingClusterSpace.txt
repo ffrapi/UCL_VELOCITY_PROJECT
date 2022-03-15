@@ -1,0 +1,3 @@
+To Check Available space in our cluster: 
+
+df -h | grep 'LepGenomics'
