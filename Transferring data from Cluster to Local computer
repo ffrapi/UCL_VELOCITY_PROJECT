@@ -15,3 +15,4 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 
       rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03.1_ANGSD_Dec2021/03.1_SAF_FEB22_FP/LR990256.1/*SW /Users/mac/Desktop/SFS/NoMinInd/LR256.1 #Here, I am copying a specific file from my cluster to the MUS_ATLAS folder
 
+      rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/Discoal/test/*msOut /Users/mac/Desktop/Simulations/test
