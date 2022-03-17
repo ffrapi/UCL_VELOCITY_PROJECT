@@ -1,0 +1,91 @@
+Running diploSHIC: 
+
+https://github.com/kr-colab/diploSHIC
+https://github.com/kr-colab/diploSHIC/wiki/A-soup-to-nuts-example
+
+
+1.	Installing diploSHIC
+
+export PATH=/share/apps/python-3.8.5-shared/bin:$PATH
+export LD_LIBRARY_PATH=/share/apps/python-3.8.5-shared/lib:$LD_LIBRARY_PATH
+python3 -m pip install scikit-allel tensorflow keras –-user
+
+
+mkdir 05_DiploSHIC
+#Copy paste all files in the diploshic folder of the cluster:
+
+/SAN/ugi/LepGenomics/Software/diploSHIC/diploshic/diploSHIC – 
+
+#because the makeFeatureVecsForSingleMSdiploid.py has .diplsohic.fvTools instead of .fvTools and error message saying that the modules are not found appears – and are not permitted to change this .py file in the above folder 
+
+diploSHIC=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/diploSHIC
+python3 setup.py install –user #run this command within diploSHIC in the shared folder
+
+python3 $diploSHIC -h #(to ensure that it works)
+
+
+2.	Creating simulations using discoal (will be updated soon)
+
+
+
+3.	Generating feature vectors from our simulation data 
+
+A.	Open makeFeatureVecsForSingleMsDiploid.py and change line 5+6+7? from diploshic.msTools to msTools, diploshic.fvTools to fvTools and diploshic.shicstats to shicstats
+B.	Run: python3 $diploSHIC fvecSim diploid train/Neut.msOut train/Neut.msOut.diploid.fvec #to ensure that it works – if it works the output will be shown within seconds
+C.	Create fvec.test.sh and fvec.train.sh
+D.	Create test.msOut (ls test/*msOut > test.msOut) and train.msOut (ls train/*msOut)
+E.	Submit scripts to queue
+
+
+
+4.	Formatting our training set
+
+#Before formatting the training set, move all the msOut.fvec files created in the previous step to a new folder
+Mkdir train_fvec #input directory
+Mkdir test_fvec
+Mkdir training_sets #output directory
+Mkdir testing_Sets 
+
+neutTrainingFileName=train Neut.msOut.diploid.fvec 
+softTrainingFilePrefix=train/Soft
+hardTrainingFilePrexif= train/Hard
+sweepTrainingWindows=5 
+linkedTrainingWindows= 1,2,3,4,6,7,8,9,10
+outDir=training_sets #mkdir training_sets within 05_Diploshic
+
+
+#Example from diploSHIC: 
+#diploSHIC makeTrainingSets rawFVFiles/neut.msOut.gz.diploid.fvec rawFVFiles/soft \ rawFVFiles/hard 5 0,1,2,3,4,6,7,8,9,10 trainingSets/
+
+Try: 
+python3 $diploSHIC makeTrainingSets train_fvec/Neut.msOut.diploid.fvec train_fvec/Soft \ train_fvec/Hard 5 0,1,2,3,4,6,7,8,9,10 training_sets/
+
+python3 $diploSHIC makeTrainingSets test_fvec/Neut.msOut.diploid.fvec test_fvec/Soft \ test_fvec/Hard 5 0,1,2,3,4,6,7,8,9,10 testing_sets/
+
+#Expected output should be 5 files: hard.fvec  linkedHard.fvec  linkedSoft.fvec  neut.fvec  soft.fvec (3.8-4Mb)
+#TimeTaken: Seconds to run
+
+
+
+
+5.	Train model 
+
+#Create output folders for our output 
+
+Mkdir train_mode #output directory
+
+Python3 $diploSHIC train training_sets/ testing_sets/ train_mode
+
+File "/share/apps/python-3.8.5-shared/lib/python3.8/site-packages/tensorflow/python/keras/initializers/__init__.py", line 85, in populate_deserializable_objects
+    generic_utils.populate_dict_with_module_objects(
+AttributeError: module 'tensorflow.python.keras.utils.generic_utils' has no attribute 'populate_dict_with_module_objects'
+
+
+Possible solutions?:
+https://stackoverflow.com/questions/61137954/attributeerror-module-tensorflow-python-keras-utils-generic-utils-has-no-attr
+https://github.com/keras-team/keras/issues/14632
+
+#Again, changes can’t be made due to permission – cluster support was emailed to resolve this problem 
+
+
+
