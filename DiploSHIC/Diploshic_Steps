@@ -87,5 +87,11 @@ https://github.com/keras-team/keras/issues/14632
 
 #Again, changes can’t be made due to permission – cluster support was emailed to resolve this problem 
 
+Answer from cluster team: "What this menas is that you would have to change all the import statements in
+the diploSHIC.py script from "from keras..." to "from tensorflow.keras..."
 
+However, you shouldn't have to do that, so I would try to build the repo,
+following the instructions here:
+
+https://github.com/kr-colab/diploSHIC "
 
