@@ -873,6 +873,61 @@ python generateSimLaunchScript.py popSize.txt trainingOutDir=train testOutDir=te
 nano diplo.sh
 
 #in diplo.sh add the following command below bin/bash: 
+discoal=/share/apps/genomics/discoal/discoal
+
  Assertion `currentTrajectory' failed.#in addition, in front of every discoal put a $ sign
 #change all directories to just train/*msOut, test/*msOut (remove trainingOutDir= and testOutDir=)
 ./diplo.sh
+
+
+##18 MARCH
+train1, test1 - difference - tried putting MAXSITES =1000000 in the generateSimLaunchScript.py and changed PopSize1.txt to 0 1500 (instead fo 0 1000)
+tried creating a script to submit diplo_FP1.sh for discoal: 
+
+
+
+#!/bin/bash
+#$ -S /bin/bash
+#$ -N C3_Discoal  ##job name
+#$ -l tmem=16G #RAM
+#$ -l h_vmem=16G #enforced limit on shell memory usage
+#$ -l h_rt=2:00:00 ##wall time.
+#$ -j y  #concatenates error and output files (with prefix job1)
+
+
+
+#Download discoal
+discoal=/share/apps/genomics/discoal/discoal
+
+#Define variable
+DIR=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC
+
+#Run on working directory
+cd $DIR
+
+
+#generating training data
+
+discoal 40 2000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 > train1/Neut.msOut
+i=0
+for x in 0.045454545454545456 0.13636363636363635 0.22727272727272727 0.3181818181818182 0.4090909090909091 0.5 0.5909090909090909 0.6818181818$
+do
+    discoal 40 2000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 -ws 0 -Pa 0.300000 15.000000 -Pu 0 0.050000 -x $x > train1/Hard_$i.ms$
+    discoal 40 2000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 -ws 0 -Pa 0.300000 15.000000 -Pu 0 0.050000 -Pf 0 0.100000 -x $x > tr$
+    i=$((i + 1))
+done
+
+
+#generating test data
+
+discoal 40 1000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 > test1/Neut.msOut
+i=0
+for x in 0.045454545454545456 0.13636363636363635 0.22727272727272727 0.3181818181818182 0.4090909090909091 0.5 0.5909090909090909 0.6818181818$
+do
+    discoal 40 1000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 -ws 0 -Pa 0.300000 15.000000 -Pu 0 0.050000 -x $x > test1/Hard_$i.msO$
+    discoal 40 1000 220000 -Pt 0.696000 6.960000 -Pre 19.140000 57.420000 -ws 0 -Pa 0.300000 15.000000 -Pu 0 0.050000 -Pf 0 0.100000 -x $x > te$
+    i=$((i + 1))
+done
+
+time $discoal
+
