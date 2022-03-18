@@ -19,6 +19,8 @@ mkdir 05_DiploSHIC
 #because the makeFeatureVecsForSingleMSdiploid.py has .diplsohic.fvTools instead of .fvTools and error message saying that the modules are not found appears – and are not permitted to change this .py file in the above folder 
 
 diploSHIC=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/diploSHIC
+diploSHIC=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/diploSHIC/diploSHIC/diploshic/diploSHIC
+
 python3 setup.py install –user #run this command within diploSHIC in the shared folder
 
 python3 $diploSHIC -h #(to ensure that it works)
