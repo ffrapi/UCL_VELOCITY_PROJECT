@@ -8,7 +8,7 @@ https://github.com/kr-colab/diploSHIC/wiki/A-soup-to-nuts-example
 
 export PATH=/share/apps/python-3.8.5-shared/bin:$PATH
 export LD_LIBRARY_PATH=/share/apps/python-3.8.5-shared/lib:$LD_LIBRARY_PATH
-python3 -m pip install scikit-allel tensorflow keras –-user
+python3 -m pip install scikit-allel tensorflow keras 
 
 
 mkdir 05_DiploSHIC
