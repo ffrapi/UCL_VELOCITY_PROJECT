@@ -20,3 +20,5 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/makeFeatureVecsForSingleMsDiploid.py /Users/mac/Desktop/diploSHIC
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03_ANGSD_Dec2021/03.1_SAF_FEB22_FP/LR9902*/*pestPG /Users/mac/Desktop/SFS/Summary_STATS_NoMinInd_5e2
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/test_fvec/*fvec /Users/mac/Desktop/diploSHIC
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/train_fvec/*fvec /Users/mac/Desktop/diploSHIC
