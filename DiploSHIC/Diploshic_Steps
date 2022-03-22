@@ -8,7 +8,23 @@ https://github.com/kr-colab/diploSHIC/wiki/A-soup-to-nuts-example
 
 export PATH=/share/apps/python-3.8.5-shared/bin:$PATH
 export LD_LIBRARY_PATH=/share/apps/python-3.8.5-shared/lib:$LD_LIBRARY_PATH
+
+
+export PATH=/share/apps/python-3.7.0-shared/bin:$PATH
+export LD_LIBRARY_PATH=/share/apps/python-3.7.0-shared/lib:$LD_LIBRARY_PATH
+
+
 python3 -m pip install scikit-allel tensorflow keras 
+
+
+git clone https://github.com/kern-lab/diploSHIC.git
+ cd diploSHIC
+ 
+ 
+scl enable devtoolset-9 bash
+source /share/apps/source_files/python/python-3.10.0.source
+source /share/apps/source_files/python/python-3.6.9.source
+python3 -m pip install --user .
 
 
 mkdir 05_DiploSHIC
@@ -20,6 +36,7 @@ mkdir 05_DiploSHIC
 
 diploSHIC=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/diploSHIC
 diploSHIC=/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/diploSHIC/diploSHIC/diploshic/diploSHIC
+diploSHIC=/home/fpitsill/diploSHIC/diploshic/diploSHIC
 
 python3 setup.py install –user #run this command within diploSHIC in the shared folder
 
@@ -76,7 +93,7 @@ python3 $diploSHIC makeTrainingSets test_fvec/Neut.msOut.diploid.fvec test_fvec/
 
 Mkdir train_mode #output directory
 
-Python3 $diploSHIC train training_sets/ testing_sets/ train_mode
+python3 $diploSHIC train training_sets/ testing_sets/ train_mode
 
 File "/share/apps/python-3.8.5-shared/lib/python3.8/site-packages/tensorflow/python/keras/initializers/__init__.py", line 85, in populate_deserializable_objects
     generic_utils.populate_dict_with_module_objects(
@@ -96,4 +113,42 @@ However, you shouldn't have to do that, so I would try to build the repo,
 following the instructions here:
 
 https://github.com/kr-colab/diploSHIC "
+
+
+
+22 MARCH 22: 
+
+Hi Frances,
+
+Having had a look at the error messages you sent, there were some technical
+issues they raised which made me think I should try building it myself. I
+managed to do this successfully, so please try the following commands:
+
+1. git clone https://github.com/kern-lab/diploSHIC.git
+2. cd diploSHIC
+3. scl enable devtoolset-9 bash
+4. source /share/apps/source_files/python/python-3.10.0.source
+5. python3 -m pip install --user .
+
+cd /share/apps/source_files/python
+What these do:
+
+Once you've cloned the diploSHIC repository and gone into the created
+diploSHIC directory (1 and 2), then:
+
+3. This puts a much more up-to-date compiler in your PATH (some of the error
+mesages suggested that the default system compiler was too old).
+4. This puts python 3.10.0 into your path to use for the build (some of the
+error message suggested version mis-matches between some package dependencies
+already installed in python 3.8.5 and those that diploSHIC required).
+5. Install diploSHIC
+
+When this has completed, you should find diploSHIC in the .local/bin directory
+of your home directory.
+
+python3 $diploSHIC train training_sets/ testing_sets/ train_mode --epochs 10
+
+
+Created all these, went to directory where my directoreis are and error message: 
+ImportError: /share/apps/python-3.10.0-shared/lib/python3.10/site-packages/scipy/spatial/transform/rotation.cpython-310-x86_64-linux-gnu.so: undefined symbol: _PyGen_Send
 
