@@ -1,8 +1,12 @@
 #AdapterRemoval
 
-##OVERVIEW: Used for trimming any remaining adapters and merging reads.
-
-
+##OVERVIEW: Used for trimming any remaining adapters and merging reads. 
+#Also used for merging overlapping paired-ended reads into longer consensus sequences
+https://adapterremoval.readthedocs.io/en/stable/
+#AdapterRemoval searches for and removes remnant adapter sequences from High-Throughput Sequencing (HTS) data and (optionally) trims low quality bases from the 3' end of reads following adapter removal.
+#AdapterRemoval removes residual adapter sequences from single-end (SE) or paired-end (PE) FASTQ reads, optionally trimming Ns and low qualities bases and/or collapsing overlapping paired-end mates into one read.
+#Low quality reads are filtered based on the resulting length and the number of ambigious nucleotides ('N') present following trimming.
+#CITATION: Schubert, Lindgreen, and Orlando (2016). AdapterRemoval v2: rapid adapter trimming, identification, and read merging. BMC Research Notes, 12;9(1):88 http://bmcresnotes.biomedcentral.com/articles/10.1186/s13104-016-1900-2
 
 #STEPS:
 
