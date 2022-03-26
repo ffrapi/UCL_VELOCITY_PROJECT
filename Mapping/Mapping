@@ -1,0 +1,30 @@
+#Mapping our sequences to the reference genome
+
+#OVERVIEW: Map museum and modern samples to the Sanger reference genome.
+#Reference genomes used: Make sure you're using the latest version of the reference genome. We're using the references from NCBI RefSeq where available. e.g. here
+#BWA is a fast short read aligner software, it uses burrows-wheeler transform to perform alignment in a time and memory efficient manner
+#It maps low-divergent sequences against a large reference genome, in our case our Sanger reference genome for Aricia agestis
+#BWA consists of three algorithms, BWA-backtrack, BWA-SW and BWA-MEM, the first of which is designed for illumina sequence reads up to 1000bp while the latter two are for longer sequences ranging from 70bp to 1Mbp.
+
+
+#Why is this step needed?
+#The goal of mapping is to realign the vast number of reads back to the respective regions it likely originated from. 
+#The mapping of the reads to the reference genome typically involves the alignment of millions of short reads to the genome using fast algorithms.
+#https://training.galaxyproject.org/training-material/topics/sequence-analysis/tutorials/mapping/tutorial.html
+
+
+
+#SOFTWARE: Burrows-Wheeler Aligner
+#CITATION: Li H. and Durbin R. (2009) Fast and accurate short read alignment with Burrows-Wheeler Transform. Bioinformatics, 25:1754-60. [PMID: 19451168]
+
+
+#INPUT:  Adapter removal reads, pari1.truncated.gz and pair2.truncated.gz files
+#OUTPUT: .bam files
+
+
+#STEPS: 
+#1: Index the reference genome before mapping
+#2: Create list of the input names eg mus.tomap
+#3: Create output directories
+#4: Modify scripts
+#5: Index the resulting bam files Li H. and Durbin R. (2009) Fast and accurate short read alignment with Burrows-Wheeler Transform. Bioinformatics, 25:1754-60. [PMID: 19451168]
