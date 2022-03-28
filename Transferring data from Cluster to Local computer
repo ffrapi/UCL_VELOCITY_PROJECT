@@ -22,3 +22,30 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03_ANGSD_Dec2021/03.1_SAF_FEB22_FP/LR9902*/*pestPG /Users/mac/Desktop/SFS/Summary_STATS_NoMinInd_5e2
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/test_fvec/*fvec /Users/mac/Desktop/diploSHIC
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/train_fvec/*fvec /Users/mac/Desktop/diploSHIC
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-01_190312_L005.collapsed.gz/*txt /Users/mac/Desktop/MapDamage/Mus
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-01_190312_L005.collapsed.gz/*csv /Users/mac/Desktop/MapDamage/Mus
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-13_190312_L005.collapsed.gz/*txt /Users/mac/Desktop/MapDamage/Mus/13
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-26_191121_L003.collapsed.gz/*txt /Users/mac/Desktop/MapDamage/Mus/26
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-34_191121_L003.collapsed.gz/*txt /Users/mac/Desktop/MapDamage/Mus/34
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-13_190312_L005.collapsed.gz/*pdf /Users/mac/Desktop/MapDamage/Mus/13
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-26_191121_L003.collapsed.gz/*cpdf /Users/mac/Desktop/MapDamage/Mus/26
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MUS/AAg-19-1900-34_191121_L003.collapsed.gz/*pdf /Users/mac/Desktop/MapDamage/Mus/34
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-01_L002.pair1.truncated.gz/*txt /Users/mac/Desktop/MapDamage/modc/01
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-01_L002.pair1.truncated.gz/*csv /Users/mac/Desktop/MapDamage/modc/01
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-01_L002.pair1.truncated.gz/*pdf /Users/mac/Desktop/MapDamage/modc/01
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-13/*txt /Users/mac/Desktop/MapDamage/modc/13
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-26_L002.pair1.truncated.gz/*txt /Users/mac/Desktop/MapDamage/modc/26
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-34_L002.pair1.truncated.gz/*txt /Users/mac/Desktop/MapDamage/modc/34
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-13/*pdf /Users/mac/Desktop/MapDamage/modc/13
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-26_L002.pair1.truncated.gz/*pdf /Users/mac/Desktop/MapDamage/modc/26
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-34_L002.pair1.truncated.gz/*pdf /Users/mac/Desktop/MapDamage/modc/34
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-13/*csv /Users/mac/Desktop/MapDamage/modc/13
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-26_L002.pair1.truncated.gz/*csv /Users/mac/Desktop/MapDamage/modc/26
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-34_L002.pair1.truncated.gz/*csv /Users/mac/Desktop/MapDamage/modc/34
