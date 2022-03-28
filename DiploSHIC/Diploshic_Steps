@@ -55,7 +55,7 @@ C.	Create fvec.test.sh and fvec.train.sh
 D.	Create test.msOut (ls test/*msOut > test.msOut) and train.msOut (ls train/*msOut)
 E.	Submit scripts to queue
 
-
+python3 $diploSHIC fvecSim diploid train4/Neut.msOut train_fvec4 
 
 4.	Formatting our training set
 
@@ -84,6 +84,8 @@ python3 $diploSHIC makeTrainingSets test_fvec/Neut.msOut.diploid.fvec test_fvec/
 #Expected output should be 5 files: hard.fvec  linkedHard.fvec  linkedSoft.fvec  neut.fvec  soft.fvec (3.8-4Mb)
 #TimeTaken: Seconds to run
 
+python3 $diploSHIC makeTrainingSets train4_fvec/Neut.msOut.diploid.fvec train4_fvec/Soft \ train4_fvec/Hard 5 0,1,2,3,4,6,7,8,9,10 training_sets4/
+python3 $diploSHIC makeTrainingSets test5_fvec/Neut.msOut.diploid.fvec test5_fvec/Soft \ test5_fvec/Hard 5 0,1,2,3,4,6,7,8,9,10 testing_sets5/
 
 
 
