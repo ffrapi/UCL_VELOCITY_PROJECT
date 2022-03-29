@@ -49,3 +49,5 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-13/*csv /Users/mac/Desktop/MapDamage/modc/13
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-26_L002.pair1.truncated.gz/*csv /Users/mac/Desktop/MapDamage/modc/26
 rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/02c_MapDamage_MODC/AAg-19-2016-34_L002.pair1.truncated.gz/*csv /Users/mac/Desktop/MapDamage/modc/34
+
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/train4_fvec/*fvec /Users/mac/Desktop/diploSHIC/train4
