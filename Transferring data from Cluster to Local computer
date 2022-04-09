@@ -55,3 +55,6 @@ rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_ages
 
 rsync -auve "ssh -p 3000" fpitsill@localhost:/Users/mac/Desktop/diploSHIC/training_sets2A/*fvec /SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/05_DiploSHIC/training_sets2A
 
+/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03.1_ANGSD_Dec2021/03.1_SAF_APR22_FP
+rsync -auve "ssh -p 3000" fpitsill@localhost:/SAN/ugi/LepGenomics/C3_Aricia_agestis_FP/03.1_ANGSD_Dec2021/03.1_SAF_APR22_FP/LR*/MODE*pestPG* /Users/mac/Desktop/ANGSD/MODE
+
